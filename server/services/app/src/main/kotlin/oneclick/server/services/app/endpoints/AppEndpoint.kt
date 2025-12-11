@@ -32,7 +32,11 @@ internal fun Route.appEndpoint() {
             if (isHtmlFile) {
                 call.response.headers.append(
                     "Content-Security-Policy",
-                    "default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'self'; img-src 'self'; style-src 'self';"
+                    "default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'none'; require-trusted-types-for 'script';"
+                )
+                call.response.headers.append(
+                    "Cross-Origin-Opener-Policy",
+                    "same-origin"
                 )
                 call.response.headers.append(
                     "X-Content-Type-Options",

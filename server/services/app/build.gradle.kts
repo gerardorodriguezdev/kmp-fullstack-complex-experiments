@@ -53,6 +53,7 @@ dependencies {
     implementation(ktorLibs.server.auth.jwt)
     implementation(ktorLibs.server.sessions)
     implementation(ktorLibs.server.csrf)
+    implementation(ktorLibs.server.hsts)
     implementation(libs.kmp.sqldelight)
     implementation(libs.jvm.logback.classic)
     implementation(libs.jvm.hiraki)
