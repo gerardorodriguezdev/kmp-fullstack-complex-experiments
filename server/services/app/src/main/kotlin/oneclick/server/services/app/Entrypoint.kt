@@ -45,4 +45,5 @@ private fun Application.configureModules(dependencies: Dependencies) {
         registrationCodeProvider = dependencies.registrationCodeProvider,
         registrableUsersRepository = dependencies.registrableUsersRepository,
     )
+    configureCsrf(origin = dependencies.baseUrl)
 }
