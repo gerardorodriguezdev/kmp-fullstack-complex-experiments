@@ -32,7 +32,7 @@ internal fun Route.appEndpoint() {
             if (isHtmlFile) {
                 call.response.headers.append(
                     "Content-Security-Policy",
-                    "default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'self'; form-action 'self';"
+                    "default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'self'; img-src 'self'; style-src 'self';"
                 )
                 call.response.headers.append(
                     "X-Content-Type-Options",
