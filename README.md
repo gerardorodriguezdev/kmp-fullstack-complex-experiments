@@ -75,7 +75,7 @@ CI
 
 ## How to run?
 
-All the project is thought to be able to be run locally and mock certain pieces if required
+The project is thought to be able to be run locally and mock certain pieces if required
 
 To select which environment to run, it uses [Chamaleon](https://github.com/gerardorodriguezdev/chamaleon) so select the
 environment and use the IntelliJ run configurations available

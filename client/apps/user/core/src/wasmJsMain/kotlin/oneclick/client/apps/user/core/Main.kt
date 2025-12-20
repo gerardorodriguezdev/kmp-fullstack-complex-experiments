@@ -10,7 +10,6 @@ import io.ktor.client.engine.js.*
 import kotlinx.browser.document
 import oneclick.client.apps.user.core.buildkonfig.BuildKonfig
 import oneclick.client.apps.user.core.di.createAppComponent
-import oneclick.client.apps.user.core.Entrypoint
 import oneclick.client.apps.user.di.wasmCoreComponent
 import oneclick.client.apps.user.navigation.DefaultNavigationController
 import oneclick.client.apps.user.notifications.DefaultNotificationsController

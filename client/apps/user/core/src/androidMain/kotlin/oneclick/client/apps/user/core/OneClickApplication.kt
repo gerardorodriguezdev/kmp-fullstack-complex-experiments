@@ -6,14 +6,13 @@ import com.skydoves.compose.stability.runtime.ComposeStabilityAnalyzer
 import io.ktor.http.*
 import oneclick.client.apps.user.core.buildkonfig.BuildKonfig
 import oneclick.client.apps.user.core.di.createAppComponent
-import oneclick.client.apps.user.core.Entrypoint
 import oneclick.client.apps.user.core.mappers.urlProtocol
 import oneclick.client.apps.user.di.androidCoreComponent
 import oneclick.client.apps.user.navigation.DefaultNavigationController
+import oneclick.client.apps.user.notifications.DefaultNotificationsController
 import oneclick.client.shared.network.dataSources.DataStoreEncryptedPreferences
 import oneclick.client.shared.network.dataSources.LocalTokenDataSource
 import oneclick.client.shared.network.platform.androidHttpClientEngine
-import oneclick.client.apps.user.notifications.DefaultNotificationsController
 import oneclick.shared.dispatchers.platform.dispatchersProvider
 import oneclick.shared.logging.EmptyAppLogger
 import oneclick.shared.logging.appLogger
