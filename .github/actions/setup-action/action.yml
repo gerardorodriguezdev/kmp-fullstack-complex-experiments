@@ -16,4 +16,4 @@ runs:
       uses: gradle/actions/setup-gradle@v4
       with:
         validate-wrappers: true
-        gradle-version: '9.0.0'
+        gradle-version: '9.1.0'
