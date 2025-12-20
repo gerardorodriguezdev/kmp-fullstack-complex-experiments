@@ -46,5 +46,5 @@ private fun Application.configureModules(dependencies: Dependencies) {
         registrableUsersRepository = dependencies.registrableUsersRepository,
     )
     configureCsrf(originUrl = dependencies.baseUrl)
-    configureHsts()
+    configureHsts(disableHsts = dependencies.disableHsts)
 }

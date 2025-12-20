@@ -20,7 +20,7 @@ wasmWebsite {
         port = 3_000
         proxy = WasmWebsiteExtension.WebpackConfiguration.Proxy(
             context = mutableListOf("/api"),
-            target = "http://0.0.0.0:8080",
+            target = "http://localhost:8080",
         )
         ignoredFiles = listOf("**/local/**")
     }

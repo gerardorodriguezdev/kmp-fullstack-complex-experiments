@@ -52,6 +52,11 @@
       "nullable": true
     },
     {
+      "name": "DISABLE_HSTS",
+      "propertyType": "Boolean",
+      "nullable": true
+    },
+    {
       "name": "USE_MEMORY_DATA_SOURCES",
       "propertyType": "Boolean",
       "nullable": true
