@@ -72,6 +72,7 @@ CI
 - Creation of environments
 - Creation and publishing of docker images
 - Creation and uploading of APK
+- Creation and uploading of IPA
 
 ## How to run?
 
@@ -90,6 +91,7 @@ Server
 User Client
 
 - runAndroid: Runs the android client
+- runIos: Runs the iOS client
 - runWasm: Runs the wasm client
 
 Home Client
