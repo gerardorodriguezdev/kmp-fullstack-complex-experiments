@@ -3,13 +3,17 @@
 .gradle
 **/build/
 !src/**/build/
+local.properties
 
-# Local
+# All
 **/local/
 **/release/
-local.properties
 production.environment.chamaleon.json
 staging.environment.chamaleon.json
+
+# Android
+*.apk
+output-metadata.json
 
 # IntelliJ
 .idea
@@ -23,6 +27,8 @@ xcuserdata
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
-# Misc
-.DS_Store
+# Jvm
 java_*
+
+# Mac
+.DS_Store
