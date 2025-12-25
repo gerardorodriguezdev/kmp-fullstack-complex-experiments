@@ -1,6 +1,5 @@
 package oneclick.server.services.app.dataSources
 
-import io.ktor.util.logging.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -14,11 +13,13 @@ import oneclick.shared.contracts.core.models.NonNegativeInt.Companion.toNonNegat
 import oneclick.shared.contracts.homes.models.Device
 import oneclick.shared.contracts.homes.models.Home
 import oneclick.shared.dispatchers.platform.DispatchersProvider
+import oneclick.shared.logging.AppLogger
+import oneclick.shared.logging.AppLogger.Companion.e
 
 internal class PostgresHomesDataSource(
     private val database: AppDatabase,
     private val dispatchersProvider: DispatchersProvider,
-    private val logger: Logger,
+    private val appLogger: AppLogger,
 ) : HomesDataSource {
 
     override suspend fun homesEntry(
@@ -44,7 +45,7 @@ internal class PostgresHomesDataSource(
                     totalPages = totalHomes()
                 )
             } catch (error: Exception) {
-                logger.error("Error getting homes", error)
+                appLogger.e("Error getting homes", error)
                 null
             }
         }
@@ -94,7 +95,7 @@ internal class PostgresHomesDataSource(
                 val (homes, devices) = entries.homeByUserIdAndHomeIdToEntries().normalizeHomes()
                 toHomes(homes, devices).firstOrNull()
             } catch (error: Exception) {
-                logger.error("Error getting home", error)
+                appLogger.e("Error getting home", error)
                 null
             }
         }
@@ -119,7 +120,7 @@ internal class PostgresHomesDataSource(
 
                 true
             } catch (error: Exception) {
-                logger.error("Error inserting home", error)
+                appLogger.e("Error inserting home", error)
                 false
             }
         }

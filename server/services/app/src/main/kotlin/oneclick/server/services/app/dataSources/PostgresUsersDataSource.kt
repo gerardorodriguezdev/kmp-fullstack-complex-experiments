@@ -1,6 +1,5 @@
 package oneclick.server.services.app.dataSources
 
-import io.ktor.util.logging.*
 import kotlinx.coroutines.withContext
 import oneclick.server.services.app.dataSources.base.UsersDataSource
 import oneclick.server.services.app.dataSources.models.User
@@ -10,11 +9,13 @@ import oneclick.server.shared.authentication.models.HashedPassword
 import oneclick.shared.contracts.auth.models.Username
 import oneclick.shared.contracts.core.models.Uuid
 import oneclick.shared.dispatchers.platform.DispatchersProvider
+import oneclick.shared.logging.AppLogger
+import oneclick.shared.logging.AppLogger.Companion.e
 
 internal class PostgresUsersDataSource(
     private val database: AppDatabase,
     private val dispatchersProvider: DispatchersProvider,
-    private val logger: Logger,
+    private val appLogger: AppLogger,
 ) : UsersDataSource {
 
     override suspend fun user(findable: UsersDataSource.Findable): User? =
@@ -35,7 +36,7 @@ internal class PostgresUsersDataSource(
                 dbUser?.toUser()
             }
         } catch (error: Exception) {
-            logger.error("Error trying to find user", error)
+            appLogger.e("Error trying to find user", error)
             null
         }
 
@@ -53,7 +54,7 @@ internal class PostgresUsersDataSource(
                 true
             }
         } catch (error: Exception) {
-            logger.error("Error trying to save user", error)
+            appLogger.e("Error trying to save user", error)
             false
         }
 

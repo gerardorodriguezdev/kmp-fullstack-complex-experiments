@@ -1,7 +1,6 @@
 package oneclick.server.services.app
 
 import io.ktor.server.application.*
-import io.ktor.util.logging.*
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.RedisClient
 import io.lettuce.core.api.coroutines
@@ -20,6 +19,7 @@ import oneclick.server.shared.db.databaseDriver
 import oneclick.shared.dispatchers.platform.DispatchersProvider
 import oneclick.shared.dispatchers.platform.dispatchersProvider
 import oneclick.shared.logging.AppLogger
+import oneclick.shared.logging.appLogger
 import oneclick.shared.security.DefaultSecureRandomProvider
 import oneclick.shared.timeProvider.SystemTimeProvider
 import oneclick.shared.timeProvider.TimeProvider
@@ -35,7 +35,7 @@ fun main() {
         secureRandomProvider = secureRandomProvider,
     )
     val passwordManager = BcryptPasswordManager(secureRandomProvider)
-    val logger = KtorSimpleLogger("oneclick.defaultlogger")
+    val appLogger = appLogger()
     val dispatchersProvider = dispatchersProvider()
     val uuidProvider = DefaultUuidProvider()
     val userJwtProvider = UserJwtProvider(
@@ -64,11 +64,10 @@ fun main() {
             postgresUsername = environment.postgresUsername,
             postgresPassword = environment.postgresPassword,
             redisUrl = environment.redisUrl,
-            logger = logger,
+            appLogger = appLogger,
             dispatchersProvider = dispatchersProvider,
         )
     }
-    val appLogger = DelegatedAppLogger(logger)
     val emailService = if (environment.useLogEmailService) {
         DebugEmailService(appLogger)
     } else {
@@ -88,7 +87,6 @@ fun main() {
         disableHsts = environment.disableHsts,
         passwordManager = passwordManager,
         timeProvider = timeProvider,
-        logger = logger,
         userJwtProvider = userJwtProvider,
         homeJwtProvider = homeJwtProvider,
         onShutdown = repositories.onShutdown,
@@ -144,7 +142,7 @@ private fun databaseRepositories(
     postgresUsername: String,
     postgresPassword: String,
     redisUrl: String,
-    logger: Logger,
+    appLogger: AppLogger,
     dispatchersProvider: DispatchersProvider,
 ): Repositories {
     val databaseDriver = databaseDriver(
@@ -162,9 +160,9 @@ private fun databaseRepositories(
     val memoryUsersDataSource = RedisUsersDataSource(
         syncCommands = redisConnection.coroutines(),
         dispatchersProvider = dispatchersProvider,
-        logger = logger,
+        appLogger = appLogger,
     )
-    val diskUsersDataSource = PostgresUsersDataSource(appDatabase, dispatchersProvider, logger)
+    val diskUsersDataSource = PostgresUsersDataSource(appDatabase, dispatchersProvider, appLogger)
     val usersRepository = DefaultUsersRepository(
         diskUsersDataSource = diskUsersDataSource,
         memoryUsersDataSource = memoryUsersDataSource,
@@ -173,9 +171,9 @@ private fun databaseRepositories(
     val memoryHomesDataSource = RedisHomesDataSource(
         syncCommands = redisConnection.coroutines(),
         dispatchersProvider = dispatchersProvider,
-        logger = logger,
+        appLogger = appLogger,
     )
-    val diskHomesDataSource = PostgresHomesDataSource(appDatabase, dispatchersProvider, logger)
+    val diskHomesDataSource = PostgresHomesDataSource(appDatabase, dispatchersProvider, appLogger)
     val homesRepository = DefaultHomesRepository(
         memoryHomesDataSource = memoryHomesDataSource,
         diskHomesDataSource = diskHomesDataSource,
@@ -189,12 +187,12 @@ private fun databaseRepositories(
     val memoryRegistrableUsersDataSource = RedisRegistrableUsersDataSource(
         syncCommands = redisConnection.coroutines(),
         dispatchersProvider = dispatchersProvider,
-        logger = logger,
+        appLogger = appLogger,
     )
     val diskRegistrableUsersDataSource = PostgresRegistrableUsersDataSource(
         database = appDatabase,
         dispatchersProvider = dispatchersProvider,
-        logger = logger,
+        appLogger = appLogger,
     )
     val registrableUsersRepository = DefaultRegistrableUsersRepository(
         memoryRegistrableUsersDataSource = memoryRegistrableUsersDataSource,
@@ -245,10 +243,3 @@ private class Repositories(
     val registrableUsersRepository: RegistrableUsersRepository,
     val onShutdown: (application: Application) -> Unit,
 )
-
-private class DelegatedAppLogger(private val logger: Logger) : AppLogger {
-    override fun i(message: String) = logger.info(message)
-    override fun i(tag: String, message: String) = logger.info("$tag: $message")
-    override fun e(message: String) = logger.error(message)
-    override fun e(tag: String, message: String) = logger.error("$tag: $message")
-}

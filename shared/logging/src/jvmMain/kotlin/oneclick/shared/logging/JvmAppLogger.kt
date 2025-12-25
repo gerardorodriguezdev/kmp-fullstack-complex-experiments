@@ -1,10 +1,10 @@
 package oneclick.shared.logging
 
-import oneclick.shared.logging.AppLogger.Companion.TAG
+import oneclick.shared.logging.AppLogger.Companion.DEFAULT_TAG
 
 class JvmAppLogger : AppLogger {
     override fun i(message: String) {
-        println("$TAG $message")
+        println("$DEFAULT_TAG $message")
     }
 
     override fun i(tag: String, message: String) {
@@ -12,7 +12,7 @@ class JvmAppLogger : AppLogger {
     }
 
     override fun e(message: String) {
-        System.err.println("$TAG $message")
+        System.err.println("$DEFAULT_TAG $message")
     }
 
     override fun e(tag: String, message: String) {

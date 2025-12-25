@@ -1,6 +1,5 @@
 package oneclick.server.services.app.dataSources
 
-import io.ktor.util.logging.*
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.api.coroutines.RedisCoroutinesCommands
 import kotlinx.coroutines.withContext
@@ -11,12 +10,14 @@ import oneclick.server.services.app.dataSources.models.User
 import oneclick.shared.contracts.auth.models.Username
 import oneclick.shared.contracts.core.models.Uuid
 import oneclick.shared.dispatchers.platform.DispatchersProvider
+import oneclick.shared.logging.AppLogger
+import oneclick.shared.logging.AppLogger.Companion.e
 
 @OptIn(ExperimentalLettuceCoroutinesApi::class)
 internal class RedisUsersDataSource(
     private val syncCommands: RedisCoroutinesCommands<String, String>,
     private val dispatchersProvider: DispatchersProvider,
-    private val logger: Logger,
+    private val appLogger: AppLogger,
 ) : UsersDataSource {
 
     override suspend fun user(findable: Findable): User? =
@@ -25,7 +26,7 @@ internal class RedisUsersDataSource(
                 syncCommands.getUser(findable)
             }
         } catch (error: Exception) {
-            logger.error("Error trying to find user", error)
+            appLogger.e("Error trying to find user", error)
             null
         }
 
@@ -37,7 +38,7 @@ internal class RedisUsersDataSource(
                 true
             }
         } catch (error: Exception) {
-            logger.error("Error trying to save user", error)
+            appLogger.e("Error trying to save user", error)
             false
         }
 

@@ -17,16 +17,15 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
     )
 
 private fun Application.configureModules(dependencies: Dependencies) {
-    configureCallLogging(logger = dependencies.logger, timeProvider = dependencies.timeProvider)
+    configureCallLogging(timeProvider = dependencies.timeProvider)
     configureSerialization()
     configureSessions(disableSecureCookies = dependencies.disableSecureCookie)
     configureAuthentication(
-        logger = dependencies.logger,
         invalidJwtDataSource = dependencies.invalidJwtDataSource,
         userJwtProvider = dependencies.userJwtProvider,
         homeJwtProvider = dependencies.homeJwtProvider,
     )
-    configureStatusPages(dependencies.logger)
+    configureStatusPages()
     configureRequestValidation()
     configureRequestBodyLimit()
     configureRateLimit(disableRateLimit = dependencies.disableRateLimit, timeProvider = dependencies.timeProvider)

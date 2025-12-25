@@ -1,6 +1,5 @@
 package oneclick.server.services.app.dataSources
 
-import io.ktor.util.logging.*
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.api.coroutines.RedisCoroutinesCommands
 import kotlinx.coroutines.async
@@ -13,12 +12,14 @@ import oneclick.server.services.app.dataSources.models.HomesEntry
 import oneclick.shared.contracts.core.models.*
 import oneclick.shared.contracts.homes.models.Home
 import oneclick.shared.dispatchers.platform.DispatchersProvider
+import oneclick.shared.logging.AppLogger
+import oneclick.shared.logging.AppLogger.Companion.e
 
 @OptIn(ExperimentalLettuceCoroutinesApi::class)
 internal class RedisHomesDataSource(
     private val syncCommands: RedisCoroutinesCommands<String, String>,
     private val dispatchersProvider: DispatchersProvider,
-    private val logger: Logger,
+    private val appLogger: AppLogger,
 ) : HomesDataSource {
 
     override suspend fun homesEntry(
@@ -42,7 +43,7 @@ internal class RedisHomesDataSource(
                     totalPages = NonNegativeInt.unsafe(syncCommands.totalHomes(userId)),
                 )
             } catch (error: Exception) {
-                logger.error("Error getting homes", error)
+                appLogger.e("Error getting homes", error)
                 null
             }
         }
@@ -52,7 +53,7 @@ internal class RedisHomesDataSource(
             try {
                 syncCommands.home(userId = userId, homeId = homeId)
             } catch (error: Exception) {
-                logger.error("Error getting home", error)
+                appLogger.e("Error getting home", error)
                 null
             }
         }
@@ -63,7 +64,7 @@ internal class RedisHomesDataSource(
                 syncCommands.saveHome(userId = userId, home = home)
                 true
             } catch (error: Exception) {
-                logger.error("Error saving home", error)
+                appLogger.e("Error saving home", error)
                 false
             }
         }

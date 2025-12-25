@@ -1,6 +1,5 @@
 package oneclick.server.services.app.dataSources
 
-import io.ktor.util.logging.*
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.api.coroutines.RedisCoroutinesCommands
 import kotlinx.coroutines.withContext
@@ -9,12 +8,14 @@ import oneclick.server.services.app.dataSources.base.RegistrableUsersDataSource
 import oneclick.server.services.app.dataSources.models.RegistrableUser
 import oneclick.server.shared.authentication.models.RegistrationCode
 import oneclick.shared.dispatchers.platform.DispatchersProvider
+import oneclick.shared.logging.AppLogger
+import oneclick.shared.logging.AppLogger.Companion.e
 
 @OptIn(ExperimentalLettuceCoroutinesApi::class)
 internal class RedisRegistrableUsersDataSource(
     private val syncCommands: RedisCoroutinesCommands<String, String>,
     private val dispatchersProvider: DispatchersProvider,
-    private val logger: Logger,
+    private val appLogger: AppLogger,
 ) : RegistrableUsersDataSource {
 
     override suspend fun registrableUser(registrationCode: RegistrationCode): RegistrableUser? =
@@ -23,7 +24,7 @@ internal class RedisRegistrableUsersDataSource(
                 syncCommands.getRegistrableUser(registrationCode)
             }
         } catch (error: Exception) {
-            logger.error("Error trying to find registrable user", error)
+            appLogger.e("Error trying to find registrable user", error)
             null
         }
 
@@ -35,7 +36,7 @@ internal class RedisRegistrableUsersDataSource(
                 true
             }
         } catch (error: Exception) {
-            logger.error("Error trying to save registrable user", error)
+            appLogger.e("Error trying to save registrable user", error)
             false
         }
 
@@ -45,7 +46,7 @@ internal class RedisRegistrableUsersDataSource(
                 syncCommands.deleteRegistrableUserByRegistrationCode(registrationCode)
             }
         } catch (error: Exception) {
-            logger.error("Error trying to delete registrable user", error)
+            appLogger.e("Error trying to delete registrable user", error)
             false
         }
 

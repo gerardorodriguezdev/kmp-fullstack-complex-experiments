@@ -10,7 +10,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
-import io.ktor.util.logging.*
 import oneclick.server.services.app.authentication.AuthenticationType
 import oneclick.server.services.app.authentication.HomeJwtProvider
 import oneclick.server.services.app.authentication.JwtCredentials.HomeJwtCredentials
@@ -26,7 +25,6 @@ import java.util.*
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 internal fun Application.configureAuthentication(
-    logger: Logger,
     invalidJwtDataSource: InvalidJwtDataSource,
     userJwtProvider: UserJwtProvider,
     homeJwtProvider: HomeJwtProvider,
@@ -36,7 +34,6 @@ internal fun Application.configureAuthentication(
             when (authenticationType) {
                 AuthenticationType.USER_SESSION -> registerUserSessionAuthentication(
                     userJwtProvider = userJwtProvider,
-                    logger = logger,
                     invalidJwtDataSource = invalidJwtDataSource,
                 )
 
@@ -56,7 +53,6 @@ internal fun Application.configureAuthentication(
 
 private fun AuthenticationConfig.registerUserSessionAuthentication(
     userJwtProvider: UserJwtProvider,
-    logger: Logger,
     invalidJwtDataSource: InvalidJwtDataSource,
 ) {
     session<Jwt>(AuthenticationType.USER_SESSION.value) {
@@ -64,7 +60,7 @@ private fun AuthenticationConfig.registerUserSessionAuthentication(
             val decodedJwt = try {
                 userJwtProvider.jwtVerifier.verify(jwt.value)
             } catch (error: JWTVerificationException) {
-                logger.error("Error decoding jwt", error)
+                application.log.error("Error decoding jwt", error)
                 null
             } ?: return@validate null
 

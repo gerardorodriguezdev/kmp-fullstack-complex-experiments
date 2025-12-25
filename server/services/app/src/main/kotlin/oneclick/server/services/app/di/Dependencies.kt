@@ -1,14 +1,13 @@
 package oneclick.server.services.app.di
 
 import io.ktor.server.application.*
-import io.ktor.util.logging.*
+import oneclick.server.services.app.authentication.HomeJwtProvider
+import oneclick.server.services.app.authentication.UserJwtProvider
 import oneclick.server.services.app.dataSources.base.InvalidJwtDataSource
 import oneclick.server.services.app.repositories.HomesRepository
-import oneclick.server.services.app.repositories.UsersRepository
-import oneclick.server.services.app.authentication.HomeJwtProvider
-import oneclick.server.shared.authentication.security.PasswordManager
-import oneclick.server.services.app.authentication.UserJwtProvider
 import oneclick.server.services.app.repositories.RegistrableUsersRepository
+import oneclick.server.services.app.repositories.UsersRepository
+import oneclick.server.shared.authentication.security.PasswordManager
 import oneclick.server.shared.authentication.security.RegistrationCodeProvider
 import oneclick.server.shared.authentication.security.UuidProvider
 import oneclick.shared.timeProvider.TimeProvider
@@ -22,7 +21,6 @@ internal class Dependencies(
     val disableHsts: Boolean,
     val passwordManager: PasswordManager,
     val timeProvider: TimeProvider,
-    val logger: Logger,
     val userJwtProvider: UserJwtProvider,
     val homeJwtProvider: HomeJwtProvider,
     val invalidJwtDataSource: InvalidJwtDataSource,
