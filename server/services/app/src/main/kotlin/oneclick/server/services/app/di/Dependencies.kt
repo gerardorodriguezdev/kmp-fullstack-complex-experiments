@@ -15,7 +15,7 @@ import theoneclick.server.shared.email.base.EmailService
 
 internal class Dependencies(
     protocol: String,
-    host: String,
+    val host: String,
     val disableRateLimit: Boolean,
     val disableSecureCookie: Boolean,
     val disableHsts: Boolean,

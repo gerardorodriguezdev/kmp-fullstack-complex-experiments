@@ -30,7 +30,7 @@ private fun Application.configureModules(dependencies: Dependencies) {
     configureRequestBodyLimit()
     configureRateLimit(disableRateLimit = dependencies.disableRateLimit, timeProvider = dependencies.timeProvider)
     configureCallId(dependencies.uuidProvider)
-    configureCompression(dependencies.baseUrl)
+    configureCompression(baseUrl = dependencies.baseUrl)
     configureShutdown(dependencies.onShutdown)
     configureRouting(
         usersRepository = dependencies.usersRepository,
@@ -44,6 +44,6 @@ private fun Application.configureModules(dependencies: Dependencies) {
         registrationCodeProvider = dependencies.registrationCodeProvider,
         registrableUsersRepository = dependencies.registrableUsersRepository,
     )
-    configureCsrf(originUrl = dependencies.baseUrl)
+    configureCsrf(baseUrl = dependencies.baseUrl)
     configureHsts(disableHsts = dependencies.disableHsts)
 }

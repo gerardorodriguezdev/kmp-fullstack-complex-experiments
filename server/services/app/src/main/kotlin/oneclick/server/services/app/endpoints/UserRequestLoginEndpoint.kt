@@ -18,8 +18,8 @@ import oneclick.shared.contracts.auth.models.Jwt
 import oneclick.shared.contracts.auth.models.Password
 import oneclick.shared.contracts.auth.models.Username
 import oneclick.shared.contracts.auth.models.requests.LoginRequest.UserRequestLoginRequest
-import oneclick.shared.contracts.auth.models.responses.MobileRequestLoginResponse
 import oneclick.shared.contracts.auth.models.responses.BrowserRequestLoginResponse
+import oneclick.shared.contracts.auth.models.responses.MobileRequestLoginResponse
 import oneclick.shared.contracts.core.models.ClientEndpoint
 import oneclick.shared.contracts.core.models.ClientType
 import theoneclick.server.shared.email.base.EmailService
