@@ -5,8 +5,6 @@ import io.ktor.server.plugins.csrf.*
 
 internal fun Application.configureCsrf(allowLocalOrigins: Boolean) {
     install(CSRF) {
-        originMatchesHost()
-
         if (allowLocalOrigins) {
             allowOrigin("localhost")
             allowOrigin("127.0.0.1")
