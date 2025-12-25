@@ -1,6 +1,5 @@
 package oneclick.server.services.app
 
-import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import oneclick.server.services.app.di.Dependencies
@@ -12,38 +11,37 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
         factory = Netty,
         port = 8080,
         module = {
-            configureModules(dependencies = dependencies)
+            configureCallLogging(timeProvider = dependencies.timeProvider)
+            configureSerialization()
+            configureSessions(disableSecureCookies = dependencies.disableSecureCookie)
+            configureAuthentication(
+                invalidJwtDataSource = dependencies.invalidJwtDataSource,
+                userJwtProvider = dependencies.userJwtProvider,
+                homeJwtProvider = dependencies.homeJwtProvider,
+            )
+            configureStatusPages()
+            configureRequestValidation()
+            configureRequestBodyLimit()
+            configureRateLimit(
+                disableRateLimit = dependencies.disableRateLimit,
+                timeProvider = dependencies.timeProvider
+            )
+            configureCallId(uuidProvider = dependencies.uuidProvider)
+            configureCompression()
+            configureShutdown(onShutdown = dependencies.onShutdown)
+            configureRouting(
+                usersRepository = dependencies.usersRepository,
+                passwordManager = dependencies.passwordManager,
+                uuidProvider = dependencies.uuidProvider,
+                homesRepository = dependencies.homesRepository,
+                invalidJwtDataSource = dependencies.invalidJwtDataSource,
+                userJwtProvider = dependencies.userJwtProvider,
+                homeJwtProvider = dependencies.homeJwtProvider,
+                emailService = dependencies.emailService,
+                registrationCodeProvider = dependencies.registrationCodeProvider,
+                registrableUsersRepository = dependencies.registrableUsersRepository,
+            )
+            configureCsrf()
+            configureHsts(disableHsts = dependencies.disableHsts)
         },
     )
-
-private fun Application.configureModules(dependencies: Dependencies) {
-    configureCallLogging(timeProvider = dependencies.timeProvider)
-    configureSerialization()
-    configureSessions(disableSecureCookies = dependencies.disableSecureCookie)
-    configureAuthentication(
-        invalidJwtDataSource = dependencies.invalidJwtDataSource,
-        userJwtProvider = dependencies.userJwtProvider,
-        homeJwtProvider = dependencies.homeJwtProvider,
-    )
-    configureStatusPages()
-    configureRequestValidation()
-    configureRequestBodyLimit()
-    configureRateLimit(disableRateLimit = dependencies.disableRateLimit, timeProvider = dependencies.timeProvider)
-    configureCallId(dependencies.uuidProvider)
-    configureCompression(baseUrl = dependencies.baseUrl)
-    configureShutdown(dependencies.onShutdown)
-    configureRouting(
-        usersRepository = dependencies.usersRepository,
-        passwordManager = dependencies.passwordManager,
-        uuidProvider = dependencies.uuidProvider,
-        homesRepository = dependencies.homesRepository,
-        invalidJwtDataSource = dependencies.invalidJwtDataSource,
-        userJwtProvider = dependencies.userJwtProvider,
-        homeJwtProvider = dependencies.homeJwtProvider,
-        emailService = dependencies.emailService,
-        registrationCodeProvider = dependencies.registrationCodeProvider,
-        registrableUsersRepository = dependencies.registrableUsersRepository,
-    )
-    configureCsrf(baseUrl = dependencies.baseUrl)
-    configureHsts(disableHsts = dependencies.disableHsts)
-}

@@ -32,12 +32,12 @@
       "nullable": true
     },
     {
-      "name": "PROTOCOL",
+      "name": "JWT_AUDIENCE",
       "propertyType": "String",
       "nullable": true
     },
     {
-      "name": "HOST",
+      "name": "JWT_ISSUER",
       "propertyType": "String",
       "nullable": true
     },

@@ -14,8 +14,6 @@ import oneclick.shared.timeProvider.TimeProvider
 import theoneclick.server.shared.email.base.EmailService
 
 internal class Dependencies(
-    protocol: String,
-    val host: String,
     val disableRateLimit: Boolean,
     val disableSecureCookie: Boolean,
     val disableHsts: Boolean,
@@ -31,6 +29,4 @@ internal class Dependencies(
     val registrationCodeProvider: RegistrationCodeProvider,
     val registrableUsersRepository: RegistrableUsersRepository,
     val onShutdown: (application: Application) -> Unit,
-) {
-    val baseUrl: String = "$protocol://$host"
-}
+)

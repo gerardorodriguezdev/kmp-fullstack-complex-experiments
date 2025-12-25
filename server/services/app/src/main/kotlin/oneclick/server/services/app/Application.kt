@@ -40,7 +40,7 @@ fun main() {
     val uuidProvider = DefaultUuidProvider()
     val userJwtProvider = UserJwtProvider(
         audience = environment.jwtAudience,
-        issuer = environment.baseUrl,
+        issuer = environment.jwtIssuer,
         secretSignKey = environment.secretSignKey,
         timeProvider = timeProvider,
         encryptor = encryptor,
@@ -48,7 +48,7 @@ fun main() {
     )
     val homeJwtProvider = HomeJwtProvider(
         audience = environment.jwtAudience,
-        issuer = environment.baseUrl,
+        issuer = environment.jwtIssuer,
         secretSignKey = environment.secretSignKey,
         timeProvider = timeProvider,
         encryptor = encryptor,
@@ -80,8 +80,6 @@ fun main() {
         )
     }
     val dependencies = Dependencies(
-        protocol = environment.protocol,
-        host = environment.host,
         disableRateLimit = environment.disableRateLimit,
         disableSecureCookie = environment.disableSecureCookie,
         disableHsts = environment.disableHsts,
@@ -213,15 +211,22 @@ private fun databaseRepositories(
 }
 
 private data class Environment(
-    val protocol: String = System.getenv("PROTOCOL"),
-    val host: String = System.getenv("HOST"),
+    // Security
     val secretEncryptionKey: String = System.getenv("SECRET_ENCRYPTION_KEY"),
     val secretSignKey: String = System.getenv("SECRET_SIGN_KEY"),
+    val jwtAudience: String = System.getenv("JWT_AUDIENCE"),
+    val jwtIssuer: String = System.getenv("JWT_ISSUER"),
+
+    // Postgres
     val postgresHost: String = System.getenv("POSTGRES_HOST"),
     val postgresDatabase: String = System.getenv("POSTGRES_DATABASE"),
     val postgresUsername: String = System.getenv("POSTGRES_USERNAME"),
     val postgresPassword: String = System.getenv("POSTGRES_PASSWORD"),
+
+    // Redis
     val redisUrl: String = System.getenv("REDIS_URL"),
+
+    // Email
     val fromEmail: String = System.getenv("FROM_EMAIL"),
     val toEmail: String = System.getenv("TO_EMAIL"),
     val emailPassword: String = System.getenv("EMAIL_PASSWORD"),
@@ -233,8 +238,6 @@ private data class Environment(
     val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
     val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
 ) {
-    val baseUrl: String = "$protocol://$host"
-    val jwtAudience: String = "$baseUrl/api"
     val jdbcUrl: String = "jdbc:postgresql://$postgresHost:5432/$postgresDatabase"
 }
 

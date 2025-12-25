@@ -27,12 +27,12 @@
         "value": "password"
       },
       {
-        "name": "PROTOCOL",
-        "value": "http"
+        "name": "JWT_AUDIENCE",
+        "value": "localhost"
       },
       {
-        "name": "HOST",
-        "value": "localhost"
+        "name": "JWT_ISSUER",
+        "value": "http://localhost:8080"
       },
       {
         "name": "DISABLE_RATE_LIMIT",
@@ -40,11 +40,11 @@
       },
       {
         "name": "DISABLE_SECURE_COOKIE",
-        "value": true
+        "value": false
       },
       {
         "name": "DISABLE_HSTS",
-        "value": true
+        "value": false
       },
       {
         "name": "USE_MEMORY_DATA_SOURCES",
