@@ -1,5 +1,6 @@
 package oneclick.client.apps.home
 
+import io.ktor.http.*
 import oneclick.client.apps.home.commands.DefaultCommandsHandler
 import oneclick.client.apps.home.dataSources.MemoryDevicesStore
 import oneclick.client.apps.home.dataSources.RemoteHomeDataSource
@@ -57,11 +58,14 @@ fun main() {
         )
     )
     val devicesStore = MemoryDevicesStore()
+    val url = URLBuilder().apply {
+        protocolOrNull = environment.protocol.urlProtocol()
+        this.host = environment.host
+        environment.port?.let { this.port = environment.port }
+    }.build()
     val httpClient = nativeHttpClient(
         appLogger = appLogger,
-        urlProtocol = environment.protocol.urlProtocol(),
-        host = environment.host,
-        port = environment.port,
+        url = url,
         clientType = ClientType.DESKTOP,
         httpClientEngine = okhttpHttpClientEngine(),
         tokenDataSource = tokenDataSource,

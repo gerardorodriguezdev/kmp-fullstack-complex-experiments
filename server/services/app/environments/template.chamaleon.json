@@ -67,6 +67,11 @@
       "nullable": true
     },
     {
+      "name": "ALLOW_LOCAL_ORIGINS",
+      "propertyType": "Boolean",
+      "nullable": true
+    },
+    {
       "name": "POSTGRES_HOST",
       "propertyType": "String",
       "nullable": true

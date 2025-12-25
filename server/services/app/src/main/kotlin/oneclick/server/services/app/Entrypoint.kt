@@ -41,7 +41,7 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
                 registrationCodeProvider = dependencies.registrationCodeProvider,
                 registrableUsersRepository = dependencies.registrableUsersRepository,
             )
-            configureCsrf()
+            configureCsrf(allowLocalOrigins = dependencies.allowLocalOrigins)
             configureHsts(disableHsts = dependencies.disableHsts)
         },
     )

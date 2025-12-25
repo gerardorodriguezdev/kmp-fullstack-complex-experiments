@@ -14,9 +14,6 @@ import oneclick.shared.timeProvider.TimeProvider
 import theoneclick.server.shared.email.base.EmailService
 
 internal class Dependencies(
-    val disableRateLimit: Boolean,
-    val disableSecureCookie: Boolean,
-    val disableHsts: Boolean,
     val passwordManager: PasswordManager,
     val timeProvider: TimeProvider,
     val userJwtProvider: UserJwtProvider,
@@ -29,4 +26,10 @@ internal class Dependencies(
     val registrationCodeProvider: RegistrationCodeProvider,
     val registrableUsersRepository: RegistrableUsersRepository,
     val onShutdown: (application: Application) -> Unit,
+
+    // Debug
+    val disableRateLimit: Boolean,
+    val disableSecureCookie: Boolean,
+    val disableHsts: Boolean,
+    val allowLocalOrigins: Boolean,
 )

@@ -13,9 +13,7 @@ import oneclick.shared.dispatchers.platform.DispatchersProvider
 import oneclick.shared.logging.AppLogger
 
 fun androidCoreComponent(
-    urlProtocol: URLProtocol?,
-    host: String?,
-    port: Int?,
+    url: Url,
     httpClientEngine: HttpClientEngine,
     tokenDataSource: TokenDataSource,
     appLogger: AppLogger,
@@ -25,9 +23,7 @@ fun androidCoreComponent(
     notificationsController: NotificationsController,
 ): CoreComponent {
     val httpClient = nativeHttpClient(
-        urlProtocol = urlProtocol,
-        host = host,
-        port = port,
+        url = url,
         clientType = ClientType.MOBILE,
         appLogger = appLogger,
         httpClientEngine = httpClientEngine,

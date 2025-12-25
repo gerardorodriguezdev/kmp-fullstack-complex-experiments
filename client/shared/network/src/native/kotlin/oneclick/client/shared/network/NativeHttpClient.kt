@@ -8,18 +8,17 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import oneclick.client.shared.network.dataSources.TokenDataSource
 import oneclick.client.shared.network.extensions.clientType
+import oneclick.client.shared.network.extensions.origin
 import oneclick.client.shared.network.platform.LogoutManager
 import oneclick.client.shared.network.plugins.LogoutProxy
+import oneclick.client.shared.network.plugins.TokenProxy
 import oneclick.shared.contracts.core.models.ClientType
 import oneclick.shared.logging.AppLogger
-import oneclick.client.shared.network.dataSources.TokenDataSource
-import oneclick.client.shared.network.plugins.TokenProxy
 
 fun nativeHttpClient(
-    urlProtocol: URLProtocol?,
-    host: String?,
-    port: Int?,
+    url: Url,
     clientType: ClientType,
     appLogger: AppLogger,
     httpClientEngine: HttpClientEngine,
@@ -30,23 +29,14 @@ fun nativeHttpClient(
         install(ContentNegotiation) {
             json()
         }
-
         install(DefaultRequest) {
             contentType(ContentType.Application.Json)
 
-            urlProtocol?.let {
-                url.protocol = urlProtocol
-            }
-
-            host?.let { host ->
-                this.host = host
-            }
-
-            port?.let { port ->
-                this.port = port
-            }
+            this.url(url.toString())
 
             clientType(clientType)
+
+            origin(url)
         }
 
         install(TokenProxy) {

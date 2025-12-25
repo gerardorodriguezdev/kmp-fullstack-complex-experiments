@@ -4,6 +4,8 @@ import io.ktor.http.*
 import oneclick.shared.contracts.core.models.ClientType
 import oneclick.shared.network.ClientType
 
+fun HttpMessageBuilder.origin(originUrl: Url): Unit = headers.set(HttpHeaders.Origin, originUrl.host)
+
 fun HttpMessageBuilder.clientType(clientType: ClientType): Unit = headers.set(HttpHeaders.ClientType, clientType.value)
 
 fun String.urlProtocol(): URLProtocol? =

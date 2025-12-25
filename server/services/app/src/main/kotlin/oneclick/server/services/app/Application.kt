@@ -80,9 +80,6 @@ fun main() {
         )
     }
     val dependencies = Dependencies(
-        disableRateLimit = environment.disableRateLimit,
-        disableSecureCookie = environment.disableSecureCookie,
-        disableHsts = environment.disableHsts,
         passwordManager = passwordManager,
         timeProvider = timeProvider,
         userJwtProvider = userJwtProvider,
@@ -97,6 +94,10 @@ fun main() {
             secureRandomProvider = secureRandomProvider,
         ),
         registrableUsersRepository = repositories.registrableUsersRepository,
+        disableRateLimit = environment.disableRateLimit,
+        disableSecureCookie = environment.disableSecureCookie,
+        disableHsts = environment.disableHsts,
+        allowLocalOrigins = environment.allowLocalOrigins,
     )
 
     server(dependencies = dependencies).start(wait = true)
@@ -237,6 +238,7 @@ private data class Environment(
     val disableRateLimit: Boolean = System.getenv("DISABLE_RATE_LIMIT") == "true",
     val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
     val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
+    val allowLocalOrigins: Boolean = System.getenv("ALLOW_LOCAL_ORIGINS") == "true",
 ) {
     val jdbcUrl: String = "jdbc:postgresql://$postgresHost:5432/$postgresDatabase"
 }

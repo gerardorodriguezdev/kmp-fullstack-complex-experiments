@@ -43,10 +43,13 @@ class OneClickApplication : Application() {
         )
         val tokenDataSource = LocalTokenDataSource(encryptedPreferences)
         val navigationController = DefaultNavigationController()
+        val url = URLBuilder().apply {
+            protocolOrNull = BuildKonfig.urlProtocol()
+            BuildKonfig.HOST?.let { this.host = BuildKonfig.HOST }
+            BuildKonfig.PORT?.let { this.port = BuildKonfig.PORT }
+        }.build()
         val coreComponent = androidCoreComponent(
-            urlProtocol = BuildKonfig.urlProtocol(),
-            host = BuildKonfig.HOST,
-            port = BuildKonfig.PORT,
+            url = url,
             appLogger = appLogger,
             httpClientEngine = androidHttpClientEngine(timeProvider = SystemTimeProvider()),
             tokenDataSource = tokenDataSource,

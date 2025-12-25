@@ -1,5 +1,6 @@
 package oneclick.client.apps.user.core
 
+import io.ktor.http.*
 import kotlinx.cinterop.ExperimentalForeignApi
 import okio.Path.Companion.toPath
 import oneclick.client.apps.user.core.buildkonfig.BuildKonfig
@@ -42,10 +43,13 @@ internal object OneClickApplication {
         )
         val tokenDataSource = LocalTokenDataSource(preferences)
         val navigationController = DefaultNavigationController()
+        val url = URLBuilder().apply {
+            protocolOrNull = BuildKonfig.urlProtocol()
+            BuildKonfig.HOST?.let { host -> this.host = host }
+            BuildKonfig.PORT?.let { port -> this.port = port }
+        }.build()
         val coreComponent = iosCoreComponent(
-            urlProtocol = BuildKonfig.urlProtocol(),
-            host = BuildKonfig.HOST,
-            port = BuildKonfig.PORT,
+            url = url,
             appLogger = appLogger,
             httpClientEngine = iosHttpClientEngine(),
             tokenDataSource = tokenDataSource,

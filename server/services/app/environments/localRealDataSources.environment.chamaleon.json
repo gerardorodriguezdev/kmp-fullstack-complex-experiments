@@ -55,6 +55,10 @@
         "value": true
       },
       {
+        "name": "ALLOW_LOCAL_ORIGINS",
+        "value": true
+      },
+      {
         "name": "POSTGRES_HOST",
         "value": "postgres"
       },
