@@ -213,23 +213,25 @@ private fun databaseRepositories(
 }
 
 private data class Environment(
+    val protocol: String = System.getenv("PROTOCOL"),
+    val host: String = System.getenv("HOST"),
     val secretEncryptionKey: String = System.getenv("SECRET_ENCRYPTION_KEY"),
     val secretSignKey: String = System.getenv("SECRET_SIGN_KEY"),
-    val useMemoryDataSources: Boolean = System.getenv("USE_MEMORY_DATA_SOURCES") == "true",
-    val useLogEmailService: Boolean = System.getenv("USE_DEBUG_EMAIL_SERVICE") == "true",
     val postgresHost: String = System.getenv("POSTGRES_HOST"),
     val postgresDatabase: String = System.getenv("POSTGRES_DATABASE"),
     val postgresUsername: String = System.getenv("POSTGRES_USERNAME"),
     val postgresPassword: String = System.getenv("POSTGRES_PASSWORD"),
     val redisUrl: String = System.getenv("REDIS_URL"),
-    val disableRateLimit: Boolean = System.getenv("DISABLE_RATE_LIMIT") == "true",
-    val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
-    val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
-    val protocol: String = System.getenv("PROTOCOL"),
-    val host: String = System.getenv("HOST"),
     val fromEmail: String = System.getenv("FROM_EMAIL"),
     val toEmail: String = System.getenv("TO_EMAIL"),
     val emailPassword: String = System.getenv("EMAIL_PASSWORD"),
+
+    // Debug
+    val useMemoryDataSources: Boolean = System.getenv("USE_MEMORY_DATA_SOURCES") == "true",
+    val useLogEmailService: Boolean = System.getenv("USE_DEBUG_EMAIL_SERVICE") == "true",
+    val disableRateLimit: Boolean = System.getenv("DISABLE_RATE_LIMIT") == "true",
+    val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
+    val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
 ) {
     val baseUrl: String = "$protocol://$host"
     val jwtAudience: String = "$baseUrl/api"
