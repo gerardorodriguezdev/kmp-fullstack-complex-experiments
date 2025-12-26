@@ -46,7 +46,6 @@ dependencies {
     implementation(ktorLibs.server.callLogging)
     implementation(ktorLibs.server.requestValidation)
     implementation(ktorLibs.server.statusPages)
-    implementation(ktorLibs.server.rateLimit)
     implementation(ktorLibs.server.callId)
     implementation(ktorLibs.server.compression)
     implementation(ktorLibs.server.auth)

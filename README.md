@@ -118,3 +118,14 @@ Home Client
 - localFakeDevicesController: Uses a fake devices controller that returns events from a device as if you were connected
   to a bluetooth device so you can test without a real device
 - debugRemoteTemplate: Template to test with a remote server (can be staging/production)
+
+### Deployment considerations
+
+Your hosting service should handle:
+
+- Rate limiting
+- SSL certificates
+- Load balancing
+- Https redirect
+- Postgres security, backups and updates
+- Redis security and updates
