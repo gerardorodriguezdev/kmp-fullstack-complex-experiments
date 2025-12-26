@@ -35,6 +35,14 @@ jvmServer {
         redis(
             imageVersion = provider { libs.versions.docker.redis.api.get().toInt() },
         )
+
+        prometheus(
+            imageVersion = provider { libs.versions.docker.prometheus.api.get() },
+        )
+
+        grafana(
+            imageVersion = provider { libs.versions.docker.grafana.api.get() },
+        )
     }
 }
 

@@ -34,6 +34,7 @@ open class JvmServerExtension @Inject constructor(private val objects: ObjectFac
         val imageConfiguration = objects.newInstance(ImageConfiguration::class)
         dockerComposeConfiguration.imagesConfigurations.add(
             imageConfiguration.apply {
+                identifier.set("postgres")
                 name.set("postgres")
                 tag.set(imageVersion.map { imagesVersion -> imagesVersion.toString() })
                 this.port.set(port)
@@ -53,8 +54,43 @@ open class JvmServerExtension @Inject constructor(private val objects: ObjectFac
         val imageConfiguration = objects.newInstance(ImageConfiguration::class)
         dockerComposeConfiguration.imagesConfigurations.add(
             imageConfiguration.apply {
+                identifier.set("redis")
                 name.set("redis")
-                tag.set(imageVersion.toString())
+                tag.set(imageVersion.get().toString())
+                this.port.set(port)
+                this.volume.set(volume)
+            }
+        )
+    }
+
+    fun DockerComposeConfiguration.prometheus(
+        imageVersion: Provider<String>,
+        port: Provider<Int> = objects.property(Int::class.java).convention(9090),
+        volume: Provider<String> = objects.property(String::class.java).convention("/etc/prometheus/"),
+    ) {
+        val imageConfiguration = objects.newInstance(ImageConfiguration::class)
+        dockerComposeConfiguration.imagesConfigurations.add(
+            imageConfiguration.apply {
+                identifier.set("prometheus")
+                name.set("prom/prometheus")
+                tag.set(imageVersion)
+                this.port.set(port)
+                this.volume.set(volume)
+            }
+        )
+    }
+
+    fun DockerComposeConfiguration.grafana(
+        imageVersion: Provider<String>,
+        port: Provider<Int> = objects.property(Int::class.java).convention(3000),
+        volume: Provider<String> = objects.property(String::class.java).convention("/var/lib/grafana"),
+    ) {
+        val imageConfiguration = objects.newInstance(ImageConfiguration::class)
+        dockerComposeConfiguration.imagesConfigurations.add(
+            imageConfiguration.apply {
+                identifier.set("grafana")
+                name.set("grafana/grafana")
+                tag.set(imageVersion)
                 this.port.set(port)
                 this.volume.set(volume)
             }

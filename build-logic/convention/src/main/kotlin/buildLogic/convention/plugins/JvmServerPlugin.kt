@@ -151,6 +151,7 @@ class JvmServerPlugin : Plugin<Project> {
 
         val appImageConfiguration = objects.newInstance<ImageConfiguration>()
         appImageConfiguration.apply {
+            identifier.set(jvmServerExtension.dockerConfiguration.name)
             name.set(jvmServerExtension.dockerConfiguration.name)
             tag.set(jvmServerExtension.dockerConfiguration.tag)
             port.set(jvmServerExtension.dockerConfiguration.port)
@@ -158,7 +159,8 @@ class JvmServerPlugin : Plugin<Project> {
             dependsOn.set(
                 provider {
                     val imagesConfigurations = jvmServerExtension.dockerComposeConfiguration.imagesConfigurations.get()
-                    val dependencies = imagesConfigurations.map { imageConfiguration -> imageConfiguration.name.get() }
+                    val dependencies =
+                        imagesConfigurations.map { imageConfiguration -> imageConfiguration.identifier.get() }
                     dependencies
                 }
             )

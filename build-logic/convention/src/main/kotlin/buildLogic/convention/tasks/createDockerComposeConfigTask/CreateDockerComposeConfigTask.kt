@@ -50,6 +50,7 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
                 DockerComposeFile(
                     services = buildMap {
                         imagesConfigurations.forEach { imageConfiguration ->
+                            val identifier = imageConfiguration.identifier.get()
                             val name = imageConfiguration.name.get()
                             val tag = imageConfiguration.tag.get()
                             val port = imageConfiguration.port.get()
@@ -57,10 +58,10 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
                             val dependsOn = imageConfiguration.dependsOn.get()
                             val volume = imageConfiguration.volume.orNull
 
-                            volumes[name] = null
+                            volumes[identifier] = null
 
                             put(
-                                key = name,
+                                key = identifier,
                                 value = DockerComposeFile.Service(
                                     image = image(imageName = name, imageTag = tag),
                                     ports = ports(port = port),

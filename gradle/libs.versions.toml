@@ -1,6 +1,8 @@
 [versions]
 docker-postgres-api = "15"
 docker-redis-api = "7"
+docker-prometheus-api = "v3.8.1"
+docker-grafana-api = "5.1.0"
 android-activity = "1.12.2"
 android-gradle-plugin = "8.12.3"
 android-api = "36"
