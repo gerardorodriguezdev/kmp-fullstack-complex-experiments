@@ -11,12 +11,13 @@ android-test-navigation = "2.9.6"
 client-app-user = "6"
 jvm-api = "21"
 jvm-bcrypt = "0.10.2"
-jvm-logback = "1.5.22"
+jvm-logback = "1.5.23"
 jvm-hiraki = "7.0.2"
 jvm-postgresql = "42.7.8"
 jvm-redis = "7.1.0.RELEASE"
 jvm-email = "2.0.1"
-kmp-kable = "0.40.2"
+jvm-prometheus-registry = "1.16.1"
+kmp-kable = "0.41.0"
 kmp-kotlin-api = "2.3.0"
 kmp-compose = "1.9.3"
 kmp-coroutines = "1.10.2"
@@ -32,11 +33,11 @@ kmp-kotlin-inject = "0.8.0"
 kmp-sqldelight = "2.2.1"
 kmp-poko = "0.21.0"
 gradle-ksp = "2.3.4"
-gradle-chamaleon = "1.0.19"
+gradle-chamaleon = "1.0.20"
 gradle-docker-compose = "0.17.20"
 gradle-kaml = "0.104.0"
 gradle-jib = "3.5.2"
-gradle-stability-analyzer = "0.6.5"
+gradle-stability-analyzer = "0.6.6"
 webpack-compression = "4.0.1"
 webpack-html = "5.6.4"
 
@@ -55,6 +56,7 @@ jvm-chamaleon = { module = "io.github.gerardorodriguezdev.chamaleon:chamaleon-co
 jvm-postgresql = { module = "org.postgresql:postgresql", version.ref = "jvm-postgresql" }
 jvm-email = { module = "com.sun.mail:jakarta.mail", version.ref = "jvm-email"}
 jvm-email-activation = { module = "com.sun.activation:jakarta.activation", version.ref = "jvm-email"}
+jvm-prometheus-registry = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "jvm-prometheus-registry" }
 kmp-kable = { module = "com.juul.kable:kable-core", version.ref = "kmp-kable" }
 kmp-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "android-datastore" }
 kmp-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kmp-coroutines" }
