@@ -59,6 +59,10 @@
         "value": true
       },
       {
+        "name": "CREATE_DATABASE_TABLES",
+        "value": false
+      },
+      {
         "name": "POSTGRES_HOST",
         "value": "postgres"
       },

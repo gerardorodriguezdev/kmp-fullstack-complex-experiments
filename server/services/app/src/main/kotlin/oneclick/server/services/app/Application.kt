@@ -60,6 +60,7 @@ fun main() {
         )
     } else {
         databaseRepositories(
+            createDatabaseTables = environment.createDatabaseTables,
             jdbcUrl = environment.jdbcUrl,
             postgresUsername = environment.postgresUsername,
             postgresPassword = environment.postgresPassword,
@@ -137,6 +138,7 @@ private fun memoryRepositories(timeProvider: TimeProvider): Repositories {
 
 @OptIn(ExperimentalLettuceCoroutinesApi::class)
 private fun databaseRepositories(
+    createDatabaseTables: Boolean,
     jdbcUrl: String,
     postgresUsername: String,
     postgresPassword: String,
@@ -151,7 +153,9 @@ private fun databaseRepositories(
     )
 
     val appDatabase = AppDatabase(databaseDriver)
-    AppDatabase.Schema.create(databaseDriver)
+    if (createDatabaseTables) {
+        AppDatabase.Schema.create(databaseDriver)
+    }
 
     val redisClient = RedisClient.create(redisUrl)
     val redisConnection = redisClient.connect()
@@ -239,6 +243,7 @@ private data class Environment(
     val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
     val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
     val allowLocalOrigins: Boolean = System.getenv("ALLOW_LOCAL_ORIGINS") == "true",
+    val createDatabaseTables: Boolean = System.getenv("CREATE_DATABASE_TABLES") == "true",
 ) {
     val jdbcUrl: String = "jdbc:postgresql://$postgresHost:5432/$postgresDatabase"
 }

@@ -72,6 +72,11 @@
       "nullable": true
     },
     {
+      "name": "CREATE_DATABASE_TABLES",
+      "propertyType": "Boolean",
+      "nullable": true
+    },
+    {
       "name": "POSTGRES_HOST",
       "propertyType": "String",
       "nullable": true
