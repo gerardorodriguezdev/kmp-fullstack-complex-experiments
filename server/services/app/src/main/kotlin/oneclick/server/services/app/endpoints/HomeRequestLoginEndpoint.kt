@@ -6,7 +6,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import oneclick.server.services.app.authentication.HomeJwtProvider
 import oneclick.server.services.app.dataSources.base.UsersDataSource
-import oneclick.server.services.app.plugins.apiRateLimit
 import oneclick.server.services.app.repositories.HomesRepository
 import oneclick.server.services.app.repositories.UsersRepository
 import oneclick.server.shared.authentication.security.PasswordManager
@@ -26,47 +25,45 @@ internal fun Routing.homeRequestLoginEndpoint(
     passwordManager: PasswordManager,
     homeJwtProvider: HomeJwtProvider,
 ) {
-    apiRateLimit {
-        post(ClientEndpoint.HOME_REQUEST_LOGIN.route) { homeRequestLoginRequest: HomeRequestLoginRequest ->
-            val (username, password, homeId) = homeRequestLoginRequest
+    post(ClientEndpoint.HOME_REQUEST_LOGIN.route) { homeRequestLoginRequest: HomeRequestLoginRequest ->
+        val (username, password, homeId) = homeRequestLoginRequest
 
-            val clientType = call.request.clientType
-            if (clientType != ClientType.DESKTOP) {
-                application.log.debug("Invalid client type")
-                call.respond(HttpStatusCode.BadRequest)
-                return@post
-            }
+        val clientType = call.request.clientType
+        if (clientType != ClientType.DESKTOP) {
+            application.log.debug("Invalid client type")
+            call.respond(HttpStatusCode.BadRequest)
+            return@post
+        }
 
-            val user = usersRepository.user(UsersDataSource.Findable.ByUsername(username))
-            if (user == null) {
-                application.log.debug("User not found")
-                call.respond(HttpStatusCode.BadRequest)
-                return@post
-            }
+        val user = usersRepository.user(UsersDataSource.Findable.ByUsername(username))
+        if (user == null) {
+            application.log.debug("User not found")
+            call.respond(HttpStatusCode.BadRequest)
+            return@post
+        }
 
-            val isPasswordValid = !passwordManager.verifyPassword(
-                password = password,
-                hashedPassword = user.hashedPassword
+        val isPasswordValid = !passwordManager.verifyPassword(
+            password = password,
+            hashedPassword = user.hashedPassword
+        )
+        if (!isPasswordValid) {
+            application.log.debug("Invalid password")
+            call.respond(HttpStatusCode.Unauthorized)
+        }
+
+        val home = homesRepository.home(userId = user.userId, homeId = homeId)
+        if (home == null) {
+            application.log.debug("Registrable home")
+            registerHome(
+                userId = user.userId,
+                homesRepository = homesRepository,
+                homeJwtProvider = homeJwtProvider,
+                homeId = homeId,
             )
-            if (!isPasswordValid) {
-                application.log.debug("Invalid password")
-                call.respond(HttpStatusCode.Unauthorized)
-            }
-
-            val home = homesRepository.home(userId = user.userId, homeId = homeId)
-            if (home == null) {
-                application.log.debug("Registrable home")
-                registerHome(
-                    userId = user.userId,
-                    homesRepository = homesRepository,
-                    homeJwtProvider = homeJwtProvider,
-                    homeId = homeId,
-                )
-            } else {
-                respondValidLogin(
-                    jwt = homeJwtProvider.jwt(userId = user.userId, homeId = homeId),
-                )
-            }
+        } else {
+            respondValidLogin(
+                jwt = homeJwtProvider.jwt(userId = user.userId, homeId = homeId),
+            )
         }
     }
 }

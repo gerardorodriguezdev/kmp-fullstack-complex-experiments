@@ -8,7 +8,10 @@ internal fun Application.configureRequestBodyLimit() {
     install(RequestBodyLimit)
 }
 
-private val RequestBodyLimit = createApplicationPlugin("RequestBodyLimit", ::RequestBodyLimitConfiguration) {
+private val RequestBodyLimit = createApplicationPlugin(
+    name = "RequestBodyLimit",
+    createConfiguration = ::RequestBodyLimitConfiguration
+) {
     val bodyLimit = pluginConfig.bodyLimit
 
     onCall { call ->

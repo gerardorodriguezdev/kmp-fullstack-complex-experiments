@@ -95,7 +95,6 @@ fun main() {
             secureRandomProvider = secureRandomProvider,
         ),
         registrableUsersRepository = repositories.registrableUsersRepository,
-        disableRateLimit = environment.disableRateLimit,
         disableSecureCookie = environment.disableSecureCookie,
         disableHsts = environment.disableHsts,
         allowLocalOrigins = environment.allowLocalOrigins,

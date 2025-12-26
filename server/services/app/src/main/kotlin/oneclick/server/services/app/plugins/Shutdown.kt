@@ -9,7 +9,10 @@ internal fun Application.configureShutdown(onShutdown: (application: Application
     }
 }
 
-private val Shutdown = createApplicationPlugin("Shutdown", ::ShutdownConfiguration) {
+private val Shutdown = createApplicationPlugin(
+    name = "Shutdown",
+    createConfiguration = ::ShutdownConfiguration,
+) {
     val onShutdown = pluginConfig.onShutdown
 
     on(MonitoringEvent(ApplicationStopped)) {

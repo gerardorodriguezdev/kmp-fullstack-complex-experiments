@@ -22,10 +22,6 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
             configureStatusPages()
             configureRequestValidation()
             configureRequestBodyLimit()
-            configureRateLimit(
-                disableRateLimit = dependencies.disableRateLimit,
-                timeProvider = dependencies.timeProvider
-            )
             configureCallId(uuidProvider = dependencies.uuidProvider)
             configureCompression()
             configureShutdown(onShutdown = dependencies.onShutdown)

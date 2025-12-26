@@ -28,7 +28,6 @@ internal class Dependencies(
     val onShutdown: (application: Application) -> Unit,
 
     // Debug
-    val disableRateLimit: Boolean,
     val disableSecureCookie: Boolean,
     val disableHsts: Boolean,
     val allowLocalOrigins: Boolean,

@@ -35,10 +35,6 @@
         "value": "http://localhost:8080"
       },
       {
-        "name": "DISABLE_RATE_LIMIT",
-        "value": true
-      },
-      {
         "name": "DISABLE_SECURE_COOKIE",
         "value": true
       },

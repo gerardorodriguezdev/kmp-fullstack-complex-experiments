@@ -42,11 +42,6 @@
       "nullable": true
     },
     {
-      "name": "DISABLE_RATE_LIMIT",
-      "propertyType": "Boolean",
-      "nullable": true
-    },
-    {
       "name": "DISABLE_SECURE_COOKIE",
       "propertyType": "Boolean",
       "nullable": true
