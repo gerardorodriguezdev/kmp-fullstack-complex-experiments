@@ -1,6 +1,7 @@
 package oneclick.server.services.app.di
 
 import io.ktor.server.application.*
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import oneclick.server.services.app.authentication.HomeJwtProvider
 import oneclick.server.services.app.authentication.UserJwtProvider
 import oneclick.server.services.app.dataSources.base.InvalidJwtDataSource
@@ -26,6 +27,7 @@ internal class Dependencies(
     val registrationCodeProvider: RegistrationCodeProvider,
     val registrableUsersRepository: RegistrableUsersRepository,
     val onShutdown: (application: Application) -> Unit,
+    val prometheusMeterRegistry: PrometheusMeterRegistry,
 
     // Debug
     val disableSecureCookie: Boolean,

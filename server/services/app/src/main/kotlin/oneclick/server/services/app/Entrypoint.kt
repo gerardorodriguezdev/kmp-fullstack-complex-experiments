@@ -39,6 +39,6 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
             )
             configureCsrf(allowLocalOrigins = dependencies.allowLocalOrigins)
             configureHsts(disableHsts = dependencies.disableHsts)
-            configureMicrometer()
+            configureMicrometer(prometheusMeterRegistry = dependencies.prometheusMeterRegistry)
         },
     )

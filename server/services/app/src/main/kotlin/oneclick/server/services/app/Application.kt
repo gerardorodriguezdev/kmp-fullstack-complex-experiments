@@ -4,6 +4,8 @@ import io.ktor.server.application.*
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.RedisClient
 import io.lettuce.core.api.coroutines
+import io.micrometer.prometheusmetrics.PrometheusConfig
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import oneclick.server.services.app.authentication.HomeJwtProvider
 import oneclick.server.services.app.authentication.UserJwtProvider
 import oneclick.server.services.app.dataSources.*
@@ -80,6 +82,7 @@ fun main() {
             appLogger = appLogger,
         )
     }
+    val prometheusMeterRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val dependencies = Dependencies(
         passwordManager = passwordManager,
         timeProvider = timeProvider,
@@ -98,6 +101,7 @@ fun main() {
         disableSecureCookie = environment.disableSecureCookie,
         disableHsts = environment.disableHsts,
         allowLocalOrigins = environment.allowLocalOrigins,
+        prometheusMeterRegistry = prometheusMeterRegistry,
     )
 
     server(dependencies = dependencies).start(wait = true)
