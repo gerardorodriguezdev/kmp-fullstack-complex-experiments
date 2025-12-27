@@ -56,8 +56,8 @@ jvm-redis = { module = "io.lettuce:lettuce-core", version.ref = "jvm-redis" }
 jvm-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "kmp-coroutines" }
 jvm-chamaleon = { module = "io.github.gerardorodriguezdev.chamaleon:chamaleon-core", version.ref = "gradle-chamaleon" }
 jvm-postgresql = { module = "org.postgresql:postgresql", version.ref = "jvm-postgresql" }
-jvm-email = { module = "com.sun.mail:jakarta.mail", version.ref = "jvm-email"}
-jvm-email-activation = { module = "com.sun.activation:jakarta.activation", version.ref = "jvm-email"}
+jvm-email = { module = "com.sun.mail:jakarta.mail", version.ref = "jvm-email" }
+jvm-email-activation = { module = "com.sun.activation:jakarta.activation", version.ref = "jvm-email" }
 jvm-prometheus-registry = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "jvm-prometheus-registry" }
 kmp-kable = { module = "com.juul.kable:kable-core", version.ref = "kmp-kable" }
 kmp-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "android-datastore" }

@@ -10,7 +10,7 @@ interface PasswordManager {
     fun verifyPassword(password: Password, hashedPassword: HashedPassword): Boolean
 }
 
-data class BcryptPasswordManager(
+class BcryptPasswordManager(
     private val secureRandomProvider: SecureRandomProvider,
 ) : PasswordManager {
     override fun hashPassword(password: Password): HashedPassword =

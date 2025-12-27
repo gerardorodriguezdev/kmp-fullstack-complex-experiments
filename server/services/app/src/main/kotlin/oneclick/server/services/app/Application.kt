@@ -214,7 +214,7 @@ private fun databaseRepositories(
     )
 }
 
-private data class Environment(
+private class Environment(
     // Security
     val secretEncryptionKey: String = System.getenv("SECRET_ENCRYPTION_KEY"),
     val secretSignKey: String = System.getenv("SECRET_SIGN_KEY"),
@@ -222,8 +222,8 @@ private data class Environment(
     val jwtIssuer: String = System.getenv("JWT_ISSUER"),
 
     // Postgres
-    val postgresHost: String = System.getenv("POSTGRES_HOST"),
-    val postgresDatabase: String = System.getenv("POSTGRES_DATABASE"),
+    postgresHost: String = System.getenv("POSTGRES_HOST"),
+    postgresDatabase: String = System.getenv("POSTGRES_DATABASE"),
     val postgresUsername: String = System.getenv("POSTGRES_USERNAME"),
     val postgresPassword: String = System.getenv("POSTGRES_PASSWORD"),
 
@@ -238,7 +238,6 @@ private data class Environment(
     // Debug
     val useMemoryDataSources: Boolean = System.getenv("USE_MEMORY_DATA_SOURCES") == "true",
     val useLogEmailService: Boolean = System.getenv("USE_DEBUG_EMAIL_SERVICE") == "true",
-    val disableRateLimit: Boolean = System.getenv("DISABLE_RATE_LIMIT") == "true",
     val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
     val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
     val allowLocalOrigins: Boolean = System.getenv("ALLOW_LOCAL_ORIGINS") == "true",

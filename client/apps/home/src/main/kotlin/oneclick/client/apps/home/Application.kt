@@ -116,7 +116,7 @@ private fun File.createIfNotExists() {
     }
 }
 
-private data class Environment(
+private class Environment(
     val homeId: Uuid = Uuid.unsafe(System.getenv("HOME_ID")),
     val keyStorePath: String = System.getenv("KEYSTORE_PATH"),
     val keyStorePassword: String = System.getenv("KEYSTORE_PASSWORD"),
