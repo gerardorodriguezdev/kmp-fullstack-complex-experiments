@@ -1,10 +1,13 @@
 package buildLogic.convention.tasks.createDockerComposeConfigTask
 
+import buildLogic.convention.models.Dependency
 import buildLogic.convention.models.ImageConfiguration
 import com.charleskorn.kaml.SequenceStyle
 import com.charleskorn.kaml.SingleLineStringStyle
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.gradle.api.DefaultTask
@@ -42,7 +45,7 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
             )
         )
 
-        private fun dockerComposeConfigContent(imagesConfigurations: List<ImageConfiguration>): String {
+        fun dockerComposeConfigContent(imagesConfigurations: List<ImageConfiguration>): String {
             val volumes = mutableMapOf<String, String?>()
 
             return yaml.encodeToString(
@@ -87,14 +90,31 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
         val services: Map<String, Service>,
         val volumes: Map<String, String?>,
     ) {
+        @OptIn(ExperimentalSerializationApi::class)
         @Serializable
         data class Service(
             val image: String,
             val ports: List<String>,
+            @EncodeDefault(EncodeDefault.Mode.NEVER)
             val environment: Map<String, String> = emptyMap(),
+            @EncodeDefault(EncodeDefault.Mode.NEVER)
             @SerialName("depends_on")
-            val dependsOn: List<String> = emptyList(),
+            val dependsOn: Map<String, Dependency> = emptyMap(),
+            @EncodeDefault(EncodeDefault.Mode.NEVER)
             val volumes: List<String> = emptyList(),
-        )
+            @EncodeDefault(EncodeDefault.Mode.NEVER)
+            val healthcheck: HealthCheck? = null,
+        ) {
+            @Serializable
+            data class HealthCheck(
+                val test: List<String>,
+                val interval: String,
+                val timeout: String,
+                val retries: Int,
+            )
+
+            @Serializable
+            data class Dependency(val condition: String)
+        }
     }
 }
