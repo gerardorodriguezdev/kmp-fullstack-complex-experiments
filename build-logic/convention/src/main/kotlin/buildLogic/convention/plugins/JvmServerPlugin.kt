@@ -158,10 +158,19 @@ class JvmServerPlugin : Plugin<Project> {
             environmentVariables.set(environmentVariablesProvider)
             dependsOn.set(
                 provider {
-                    val imagesConfigurations = jvmServerExtension.dockerComposeConfiguration.imagesConfigurations.get()
-                    val dependencies =
-                        imagesConfigurations.map { imageConfiguration -> imageConfiguration.identifier.get() }
-                    dependencies
+                    buildMap {
+                        val imagesConfigurations =
+                            jvmServerExtension.dockerComposeConfiguration.imagesConfigurations.get()
+
+                        imagesConfigurations.forEach { imageConfiguration ->
+                            val identifier = imageConfiguration.identifier.get()
+
+                            val hasHealthCheck = imageConfiguration.healthCheck.isPresent
+                            val condition = if (hasHealthCheck) "service_healthy" else "service_started"
+
+                            put(identifier, condition)
+                        }
+                    }
                 }
             )
         }
