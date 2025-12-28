@@ -1,7 +1,9 @@
 package buildLogic.convention.tasks.createDockerComposeConfigTask
 
-import buildLogic.convention.models.Dependency
+import buildLogic.convention.models.HealthCheck
 import buildLogic.convention.models.ImageConfiguration
+import buildLogic.convention.tasks.createDockerComposeConfigTask.CreateDockerComposeConfigTask.DockerComposeFile.Service
+import buildLogic.convention.tasks.createDockerComposeConfigTask.CreateDockerComposeConfigTask.DockerComposeFile.Service.Condition
 import com.charleskorn.kaml.SequenceStyle
 import com.charleskorn.kaml.SingleLineStringStyle
 import com.charleskorn.kaml.Yaml
@@ -58,19 +60,21 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
                             val tag = imageConfiguration.tag.get()
                             val port = imageConfiguration.port.get()
                             val environment = imageConfiguration.environmentVariables.get()
-                            val dependsOn = imageConfiguration.dependsOn.get()
+                            val dependsOn = imageConfiguration.dependsOn.get().toDependencies()
                             val volume = imageConfiguration.volume.orNull
+                            val healthcheck = imageConfiguration.healthCheck.orNull
 
                             volumes[identifier] = null
 
                             put(
                                 key = identifier,
-                                value = DockerComposeFile.Service(
+                                value = Service(
                                     image = image(imageName = name, imageTag = tag),
                                     ports = ports(port = port),
                                     environment = environment,
                                     dependsOn = dependsOn,
                                     volumes = volume?.let { listOf(volume) } ?: emptyList(),
+                                    healthcheck = healthcheck?.toHealthCheck()
                                 )
                             )
                         }
@@ -79,6 +83,21 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
                 )
             )
         }
+
+        private fun HealthCheck.toHealthCheck(): Service.HealthCheck =
+            Service.HealthCheck(
+                test = test.get(),
+                interval = interval.get(),
+                timeout = timeout.get(),
+                retries = retries.get(),
+            )
+
+        private fun Map<String, String>.toDependencies(): Map<String, Condition> =
+            buildMap {
+                this@toDependencies.forEach { (identifier, condition) ->
+                    put(identifier, Condition(condition = condition))
+                }
+            }
 
         private fun image(imageName: String, imageTag: String): String = "$imageName:$imageTag"
 
@@ -99,7 +118,7 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
             val environment: Map<String, String> = emptyMap(),
             @EncodeDefault(EncodeDefault.Mode.NEVER)
             @SerialName("depends_on")
-            val dependsOn: Map<String, Dependency> = emptyMap(),
+            val dependsOn: Map<String, Condition> = emptyMap(),
             @EncodeDefault(EncodeDefault.Mode.NEVER)
             val volumes: List<String> = emptyList(),
             @EncodeDefault(EncodeDefault.Mode.NEVER)
@@ -114,7 +133,7 @@ abstract class CreateDockerComposeConfigTask : DefaultTask() {
             )
 
             @Serializable
-            data class Dependency(val condition: String)
+            data class Condition(val condition: String)
         }
     }
 }

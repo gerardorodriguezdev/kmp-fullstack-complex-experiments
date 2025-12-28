@@ -2,6 +2,7 @@ package buildLogic.convention.extensions.plugins
 
 import buildLogic.convention.models.DockerComposeConfiguration
 import buildLogic.convention.models.DockerConfiguration
+import buildLogic.convention.models.HealthCheck
 import buildLogic.convention.models.ImageConfiguration
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
@@ -25,11 +26,11 @@ open class JvmServerExtension @Inject constructor(private val objects: ObjectFac
 
     fun DockerComposeConfiguration.postgres(
         imageVersion: Provider<Int>,
-        port: Provider<Int> = objects.property(Int::class.java).convention(5432),
-        volume: Provider<String> = objects.property(String::class.java).convention("/var/lib/postgresql/data"),
         databaseName: Provider<String>,
         databaseUsername: Provider<String>,
         databasePassword: Provider<String>,
+        port: Provider<Int> = objects.property(Int::class.java).convention(5432),
+        volume: Provider<String> = objects.property(String::class.java).convention("/var/lib/postgresql/data"),
     ) {
         val imageConfiguration = objects.newInstance(ImageConfiguration::class)
         dockerComposeConfiguration.imagesConfigurations.add(
@@ -42,8 +43,19 @@ open class JvmServerExtension @Inject constructor(private val objects: ObjectFac
                 environmentVariables.put("POSTGRES_DB", databaseName)
                 environmentVariables.put("POSTGRES_USER", databaseUsername)
                 environmentVariables.put("POSTGRES_PASSWORD", databasePassword)
+
+                this.healthCheck.set(postgresHealthCheck())
             }
         )
+    }
+
+    private fun postgresHealthCheck(): HealthCheck {
+        val healthCheck = objects.newInstance(HealthCheck::class)
+        healthCheck.test.set(listOf("CMD-SHELL", "pg_isready -U postgres"))
+        healthCheck.interval.set("5s")
+        healthCheck.timeout.set("5s")
+        healthCheck.retries.set(5)
+        return healthCheck
     }
 
     fun DockerComposeConfiguration.redis(
