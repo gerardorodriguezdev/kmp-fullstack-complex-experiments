@@ -1,6 +1,6 @@
 package buildLogic.convention.extensions.plugins
 
-import buildLogic.convention.models.DockerConfiguration
+import buildLogic.convention.configurations.DockerConfiguration
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.kotlin.dsl.newInstance

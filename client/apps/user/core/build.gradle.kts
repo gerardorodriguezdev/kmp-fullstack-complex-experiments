@@ -1,4 +1,4 @@
-import buildLogic.convention.extensions.plugins.WasmWebsiteExtension
+import buildLogic.convention.configurations.WebpackConfiguration
 import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.compose.ExperimentalComposeLibrary
 
@@ -18,7 +18,7 @@ plugins {
 wasmWebsite {
     webpackConfiguration {
         port = 3_000
-        proxy = WasmWebsiteExtension.WebpackConfiguration.Proxy(
+        proxy = WebpackConfiguration.Proxy(
             context = mutableListOf("/api"),
             target = "http://localhost:8080",
         )

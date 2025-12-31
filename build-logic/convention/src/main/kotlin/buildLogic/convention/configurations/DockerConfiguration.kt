@@ -1,4 +1,4 @@
-package buildLogic.convention.models
+package buildLogic.convention.configurations
 
 import org.gradle.api.provider.Property
 

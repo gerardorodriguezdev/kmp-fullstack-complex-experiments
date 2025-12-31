@@ -25,24 +25,26 @@ jvmServer {
     dockerComposeConfiguration {
         executablePath = "/usr/local/bin/docker-compose"
 
-        postgres(
-            imageVersion = provider { libs.versions.docker.postgres.api.get().toInt() },
-            databaseName = stringProvider("POSTGRES_DATABASE"),
-            databaseUsername = stringProvider("POSTGRES_USERNAME"),
-            databasePassword = stringProvider("POSTGRES_PASSWORD"),
-        )
+        images {
+            postgres(
+                imageVersion = libs.versions.docker.postgres.api.get().toInt(),
+                databaseName = stringProvider("POSTGRES_DATABASE").get(),
+                databaseUsername = stringProvider("POSTGRES_USERNAME").get(),
+                databasePassword = stringProvider("POSTGRES_PASSWORD").get(),
+            )
 
-        redis(
-            imageVersion = provider { libs.versions.docker.redis.api.get().toInt() },
-        )
+            redis(
+                imageVersion = libs.versions.docker.redis.api.get().toInt(),
+            )
 
-        prometheus(
-            imageVersion = provider { libs.versions.docker.prometheus.api.get() },
-        )
+            prometheus(
+                imageVersion = libs.versions.docker.prometheus.api.get(),
+            )
 
-        grafana(
-            imageVersion = provider { libs.versions.docker.grafana.api.get() },
-        )
+            grafana(
+                imageVersion = libs.versions.docker.grafana.api.get(),
+            )
+        }
     }
 }
 
