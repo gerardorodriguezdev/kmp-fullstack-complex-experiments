@@ -47,10 +47,6 @@
         "value": "url"
       },
       {
-        "name": "PORT",
-        "value": null
-      },
-      {
         "name": "USE_FAKE_DEVICES_CONTROLLER",
         "value": false
       },

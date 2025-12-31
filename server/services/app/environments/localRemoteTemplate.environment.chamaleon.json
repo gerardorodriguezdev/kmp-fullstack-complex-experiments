@@ -97,6 +97,10 @@
       {
         "name": "EMAIL_PASSWORD",
         "value": "password123"
+      },
+      {
+        "name": "METRICS_PORT",
+        "value": "9091"
       }
     ]
   }

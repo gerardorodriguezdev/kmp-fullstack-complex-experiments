@@ -84,6 +84,8 @@ fun main() {
     }
     val prometheusMeterRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val dependencies = Dependencies(
+        port = environment.port,
+        metricsPort = environment.metricsPort,
         passwordManager = passwordManager,
         timeProvider = timeProvider,
         userJwtProvider = userJwtProvider,
@@ -219,6 +221,9 @@ private fun databaseRepositories(
 }
 
 private class Environment(
+    val port: Int = System.getenv("IMAGE_PORT").toInt(),
+    val metricsPort: Int = System.getenv("METRICS_PORT").toInt(),
+
     // Security
     val secretEncryptionKey: String = System.getenv("SECRET_ENCRYPTION_KEY"),
     val secretSignKey: String = System.getenv("SECRET_SIGN_KEY"),
@@ -226,6 +231,7 @@ private class Environment(
     val jwtIssuer: String = System.getenv("JWT_ISSUER"),
 
     // Postgres
+    postgresPort: Int = System.getenv("POSTGRES_PORT").toInt(),
     postgresHost: String = System.getenv("POSTGRES_HOST"),
     postgresDatabase: String = System.getenv("POSTGRES_DATABASE"),
     val postgresUsername: String = System.getenv("POSTGRES_USERNAME"),
@@ -247,7 +253,7 @@ private class Environment(
     val allowLocalOrigins: Boolean = System.getenv("ALLOW_LOCAL_ORIGINS") == "true",
     val createDatabaseTables: Boolean = System.getenv("CREATE_DATABASE_TABLES") == "true",
 ) {
-    val jdbcUrl: String = "jdbc:postgresql://$postgresHost:5432/$postgresDatabase"
+    val jdbcUrl: String = "jdbc:postgresql://$postgresHost:$postgresPort/$postgresDatabase"
 }
 
 private class Repositories(

@@ -16,6 +16,7 @@ jvmServer {
         executablePath = "/usr/local/bin/docker"
         name = stringProvider("IMAGE_NAME")
         port = intProvider("IMAGE_PORT")
+        metricsPort = intProvider("METRICS_PORT")
         tag = stringProvider("IMAGE_TAG")
         registryUrl = stringProvider("REGISTRY_LOCATION")
         registryUsername = stringProvider("REGISTRY_USERNAME")

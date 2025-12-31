@@ -1,9 +1,16 @@
 package buildLogic.convention.plugins
 
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service.Companion.APP_SERVICE_TYPE
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service.Companion.IDENTIFIER_KEY
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service.Companion.METRICS_PORT_KEY
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service.Companion.TYPE_KEY
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service.Companion.identifier
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service.Condition
+import buildLogic.convention.configurations.DockerComposeConfiguration.Service.Condition.ConditionType
 import buildLogic.convention.extensions.*
 import buildLogic.convention.extensions.plugins.JvmServerExtension
-import buildLogic.convention.models.ImageConfiguration
-import buildLogic.convention.tasks.createDockerComposeConfigTask.CreateDockerComposeConfigTask
+import buildLogic.convention.tasks.CreateDockerComposeConfigTask
 import com.avast.gradle.dockercompose.ComposeExtension
 import com.avast.gradle.dockercompose.DockerComposePlugin
 import io.github.gerardorodriguezdev.chamaleon.gradle.plugin.ChamaleonGradlePlugin
@@ -12,7 +19,7 @@ import io.ktor.plugin.*
 import io.ktor.plugin.features.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.RegularFile
+import org.gradle.api.file.Directory
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.plugins.JavaApplication
 import org.gradle.api.provider.Provider
@@ -21,7 +28,6 @@ import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.Sync
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.newInstance
 import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
@@ -114,9 +120,12 @@ class JvmServerPlugin : Plugin<Project> {
     }
 
     private fun Project.configureDockerComposeExtension(jvmServerExtension: JvmServerExtension) {
-        val dockerComposeFileNameString = dockerComposeFileNameString()
+        val dockerComposeDirectory = dockerComposeDirectory()
         extensions.configure(ComposeExtension::class.java) {
-            useComposeFiles.add(dockerComposeFileNameString)
+            useComposeFiles.add(
+                dockerComposeDirectory.get()
+                    .file(CreateDockerComposeConfigTask.DOCKER_COMPOSE_FILE_NAME).asFile.absolutePath
+            )
 
             executable.set(jvmServerExtension.dockerComposeConfiguration.executablePath)
             dockerExecutable.set(jvmServerExtension.dockerConfiguration.executablePath)
@@ -149,39 +158,45 @@ class JvmServerPlugin : Plugin<Project> {
             }
         }
 
-        val appImageConfiguration = objects.newInstance<ImageConfiguration>()
-        appImageConfiguration.apply {
-            identifier.set(jvmServerExtension.dockerConfiguration.name)
-            name.set(jvmServerExtension.dockerConfiguration.name)
-            tag.set(jvmServerExtension.dockerConfiguration.tag)
-            port.set(jvmServerExtension.dockerConfiguration.port)
-            environmentVariables.set(environmentVariablesProvider)
-            dependsOn.set(
-                provider {
-                    buildMap {
-                        val imagesConfigurations =
-                            jvmServerExtension.dockerComposeConfiguration.imagesConfigurations.get()
-
-                        imagesConfigurations.forEach { imageConfiguration ->
-                            val identifier = imageConfiguration.identifier.get()
-
-                            val hasHealthCheck = imageConfiguration.healthCheck.isPresent
-                            val condition = if (hasHealthCheck) "service_healthy" else "service_started"
-
-                            put(identifier, condition)
-                        }
-                    }
-                }
-            )
-        }
-        val dockerComposeFileName = dockerComposeFileName()
+        val dockerComposeDirectory = dockerComposeDirectory()
         val createDockerComposeConfigTask =
             tasks.register<CreateDockerComposeConfigTask>(CREATE_DOCKER_COMPOSE_TASK_NAME) {
-                val extensionImageConfigurations =
-                    jvmServerExtension.dockerComposeConfiguration.imagesConfigurations.get()
+                val imageName = jvmServerExtension.dockerConfiguration.name.get()
+                val imageTag = jvmServerExtension.dockerConfiguration.tag.get()
+                val port = jvmServerExtension.dockerConfiguration.port.get()
+                val metricsPort = jvmServerExtension.dockerConfiguration.metricsPort.get()
+                val services =
+                    jvmServerExtension.dockerComposeConfiguration.services.get()
 
-                imagesConfigurations.set(extensionImageConfigurations + appImageConfiguration)
-                outputFile.set(dockerComposeFileName)
+                val appService = Service(
+                    image = "$imageName:$imageTag",
+                    ports = buildList {
+                        add("$port:$port")
+                    },
+                    environment = environmentVariablesProvider.get(),
+                    dependsOn = buildMap {
+                        services.forEach { service ->
+                            val identifier = service.identifier
+
+                            val condition =
+                                if (service.healthcheck != null) {
+                                    ConditionType.SERVICE_HEALTHY
+                                } else {
+                                    ConditionType.SERVICE_STARTED
+                                }
+
+                            put(identifier, Condition(condition))
+                        }
+                    },
+                    extras = mapOf(
+                        IDENTIFIER_KEY to imageName,
+                        TYPE_KEY to APP_SERVICE_TYPE,
+                        METRICS_PORT_KEY to metricsPort.toString(),
+                    )
+                )
+
+                servicesList.set(services + appService)
+                outputDirectory.set(dockerComposeDirectory)
             }
 
         val buildImageTask = tasks.named(BUILD_DOCKER_IMAGE_TASK_NAME)
@@ -197,15 +212,8 @@ class JvmServerPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.dockerComposeFileName(): Provider<RegularFile> =
-        project.layout.buildDirectory.file("$DOCKER_COMPOSE_DIRECTORY_NAME/$DOCKER_COMPOSE_FILE_NAME")
-
-    private fun Project.dockerComposeFileNameString(): Provider<String> =
-        dockerComposeFileName()
-            .map { dockerComposeFile ->
-                val dockerComposeFilePath = dockerComposeFile.asFile.toPath()
-                project.layout.projectDirectory.asFile.toPath().relativize(dockerComposeFilePath).toString()
-            }
+    private fun Project.dockerComposeDirectory(): Provider<Directory> =
+        project.layout.buildDirectory.dir(DOCKER_COMPOSE_DIRECTORY_NAME)
 
     private companion object {
         const val BUILD_DOCKER_IMAGE_TASK_NAME = "buildImage"
@@ -218,7 +226,6 @@ class JvmServerPlugin : Plugin<Project> {
         const val PROCESS_RESOURCES_TASK_NAME = "processResources"
 
         const val DOCKER_COMPOSE_DIRECTORY_NAME = "dockerCompose"
-        const val DOCKER_COMPOSE_FILE_NAME = "docker-compose.yml"
 
         const val JVM_SERVER_EXTENSION_NAME = "jvmServer"
     }

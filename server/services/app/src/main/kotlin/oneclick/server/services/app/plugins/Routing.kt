@@ -2,6 +2,7 @@ package oneclick.server.services.app.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import oneclick.server.services.app.authentication.HomeJwtProvider
 import oneclick.server.services.app.authentication.UserJwtProvider
 import oneclick.server.services.app.dataSources.base.InvalidJwtDataSource
@@ -15,6 +16,7 @@ import oneclick.server.shared.authentication.security.UuidProvider
 import theoneclick.server.shared.email.base.EmailService
 
 internal fun Application.configureRouting(
+    metricsPort: Int,
     usersRepository: UsersRepository,
     passwordManager: PasswordManager,
     userJwtProvider: UserJwtProvider,
@@ -25,6 +27,7 @@ internal fun Application.configureRouting(
     registrationCodeProvider: RegistrationCodeProvider,
     registrableUsersRepository: RegistrableUsersRepository,
     emailService: EmailService,
+    prometheusMeterRegistry: PrometheusMeterRegistry,
 ) {
     routing {
         healthzEndpoint()
@@ -52,5 +55,6 @@ internal fun Application.configureRouting(
         userHomesEndpoint(homesRepository = homesRepository)
         homeSyncDevicesEndpoint(homesRepository = homesRepository)
         appEndpoint()
+        prometheusMetricsEndpoint(metricsPort = metricsPort, prometheusMeterRegistry = prometheusMeterRegistry)
     }
 }

@@ -9,7 +9,10 @@ import oneclick.server.services.app.plugins.authentication.configureAuthenticati
 internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> =
     embeddedServer(
         factory = Netty,
-        port = 8080,
+        configure = {
+            connector { port = dependencies.port }
+            connector { port = dependencies.metricsPort }
+        },
         module = {
             configureCallLogging(timeProvider = dependencies.timeProvider)
             configureSerialization()
@@ -26,6 +29,7 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
             configureCompression()
             configureShutdown(onShutdown = dependencies.onShutdown)
             configureRouting(
+                metricsPort = dependencies.metricsPort,
                 usersRepository = dependencies.usersRepository,
                 passwordManager = dependencies.passwordManager,
                 uuidProvider = dependencies.uuidProvider,
@@ -36,9 +40,10 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
                 emailService = dependencies.emailService,
                 registrationCodeProvider = dependencies.registrationCodeProvider,
                 registrableUsersRepository = dependencies.registrableUsersRepository,
+                prometheusMeterRegistry = dependencies.prometheusMeterRegistry
             )
             configureCsrf(allowLocalOrigins = dependencies.allowLocalOrigins)
             configureHsts(disableHsts = dependencies.disableHsts)
             configureMicrometer(prometheusMeterRegistry = dependencies.prometheusMeterRegistry)
-        },
+        }
     )

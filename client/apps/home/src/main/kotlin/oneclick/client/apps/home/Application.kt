@@ -121,8 +121,8 @@ private class Environment(
     val keyStorePath: String = System.getenv("KEYSTORE_PATH"),
     val keyStorePassword: String = System.getenv("KEYSTORE_PASSWORD"),
     val protocol: String = System.getenv("PROTOCOL"),
+    val port: Int? = System.getenv("IMAGE_PORT")?.toIntOrNull(),
     val host: String = System.getenv("HOST"),
-    val port: Int? = System.getenv("PORT")?.toIntOrNull(),
     val useFakeDevicesController: Boolean = System.getenv("USE_FAKE_DEVICES_CONTROLLER") == "true",
     val useFileAppLogger: Boolean = System.getenv("USE_FILE_APP_LOGGER") == "true",
 )

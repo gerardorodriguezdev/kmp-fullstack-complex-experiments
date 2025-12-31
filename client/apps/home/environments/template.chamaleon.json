@@ -57,11 +57,6 @@
       "nullable": true
     },
     {
-      "name": "PORT",
-      "propertyType": "String",
-      "nullable": true
-    },
-    {
       "name": "USE_FAKE_DEVICES_CONTROLLER",
       "propertyType": "Boolean",
       "nullable": true

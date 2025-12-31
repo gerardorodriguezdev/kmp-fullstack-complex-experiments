@@ -47,10 +47,6 @@
         "value": "localhost"
       },
       {
-        "name": "PORT",
-        "value": "8080"
-      },
-      {
         "name": "USE_FAKE_DEVICES_CONTROLLER",
         "value": false
       },

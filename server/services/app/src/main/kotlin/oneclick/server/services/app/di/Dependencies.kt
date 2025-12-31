@@ -15,6 +15,8 @@ import oneclick.shared.timeProvider.TimeProvider
 import theoneclick.server.shared.email.base.EmailService
 
 internal class Dependencies(
+    val port: Int,
+    val metricsPort: Int,
     val passwordManager: PasswordManager,
     val timeProvider: TimeProvider,
     val userJwtProvider: UserJwtProvider,

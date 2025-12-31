@@ -1,6 +1,9 @@
 package buildLogic.convention.configurations
 
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import java.io.Serializable as JavaSerializable
@@ -14,14 +17,10 @@ interface DockerComposeConfiguration {
     data class Service(
         val image: String,
         val ports: List<String>,
-        @EncodeDefault(EncodeDefault.Mode.NEVER)
         val environment: Map<String, String> = emptyMap(),
-        @EncodeDefault(EncodeDefault.Mode.NEVER)
         @SerialName("depends_on")
         val dependsOn: Map<String, Condition> = emptyMap(),
-        @EncodeDefault(EncodeDefault.Mode.NEVER)
         val volumes: List<String> = emptyList(),
-        @EncodeDefault(EncodeDefault.Mode.NEVER)
         val healthcheck: HealthCheck? = null,
         @Transient
         val extras: Map<String, String> = emptyMap(),
@@ -36,10 +35,24 @@ interface DockerComposeConfiguration {
         ) : JavaSerializable
 
         @Serializable
-        data class Condition(val condition: String) : JavaSerializable
+        data class Condition(val condition: ConditionType) : JavaSerializable {
+            enum class ConditionType {
+                @SerialName("service_healthy")
+                SERVICE_HEALTHY,
+
+                @SerialName("service_started")
+                SERVICE_STARTED,
+            }
+        }
 
         companion object {
-            val Service.identifier get() = extras.getValue("identifier")
+            val Service.identifier get() = extras.getValue(IDENTIFIER_KEY)
+            const val IDENTIFIER_KEY = "identifier"
+
+            const val TYPE_KEY = "type"
+            const val APP_SERVICE_TYPE = "app"
+
+            const val METRICS_PORT_KEY = "metricsPort"
         }
     }
 }

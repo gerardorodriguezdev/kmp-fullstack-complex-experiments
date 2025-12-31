@@ -120,6 +120,10 @@
       "name": "EMAIL_PASSWORD",
       "propertyType": "String",
       "nullable": true
+    },
+    {
+      "name": "METRICS_PORT",
+      "propertyType": "String"
     }
   ]
 }
