@@ -8,6 +8,10 @@
       "propertyType": "String"
     },
     {
+      "name": "METRICS_PORT",
+      "propertyType": "String"
+    },
+    {
       "name": "IMAGE_TAG",
       "propertyType": "String",
       "nullable": true

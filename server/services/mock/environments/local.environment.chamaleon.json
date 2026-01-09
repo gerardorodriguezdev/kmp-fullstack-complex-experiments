@@ -7,6 +7,10 @@
         "value": "8080"
       },
       {
+        "name": "METRICS_PORT",
+        "value": "9091"
+      },
+      {
         "name": "IMAGE_TAG",
         "value": "latest"
       },
