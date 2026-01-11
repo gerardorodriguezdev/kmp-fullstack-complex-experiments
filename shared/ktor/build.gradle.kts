@@ -11,7 +11,7 @@ plugins {
 }
 
 androidLibrary {
-    namespace = "oneclick.shared.network"
+    namespace = "oneclick.shared.ktor"
     compileSdkVersion = libs.versions.android.api.get().toInt()
     minSdkVersion = libs.versions.android.api.get().toInt()
     composeEnabled = false

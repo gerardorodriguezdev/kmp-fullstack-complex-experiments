@@ -43,7 +43,7 @@ include(
     "shared:logging",
     "shared:dispatchers",
     "shared:timeProvider",
-    "shared:network",
+    "shared:ktor",
     "shared:security",
     "shared:contracts:core",
     "shared:contracts:auth",

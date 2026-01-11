@@ -1,4 +1,4 @@
-package oneclick.shared.network
+package oneclick.shared.ktor
 
 import io.ktor.http.*
 

@@ -30,7 +30,7 @@ kotlin {
                 implementation(projects.shared.dispatchers)
                 implementation(projects.shared.timeProvider)
                 implementation(projects.shared.logging)
-                implementation(projects.shared.network)
+                implementation(projects.shared.ktor)
             }
         }
 

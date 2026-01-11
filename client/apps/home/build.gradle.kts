@@ -30,7 +30,7 @@ kotlin {
         implementation(projects.shared.contracts.homes)
         implementation(projects.shared.dispatchers)
         implementation(projects.shared.logging)
-        implementation(projects.shared.network)
+        implementation(projects.shared.ktor)
         implementation(projects.shared.security)
         implementation(projects.shared.timeProvider)
     }

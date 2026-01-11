@@ -5,7 +5,7 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import oneclick.shared.contracts.core.models.ClientType
 import oneclick.shared.contracts.core.models.ClientType.Companion.toClientType
-import oneclick.shared.network.ClientType
+import oneclick.shared.ktor.ClientType
 
 val RoutingRequest.clientType: ClientType
     get() {
