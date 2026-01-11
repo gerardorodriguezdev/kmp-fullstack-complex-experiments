@@ -12,6 +12,10 @@
       "propertyType": "String"
     },
     {
+      "name": "HEALTHZ_PORT",
+      "propertyType": "String"
+    },
+    {
       "name": "IMAGE_TAG",
       "propertyType": "String",
       "nullable": true

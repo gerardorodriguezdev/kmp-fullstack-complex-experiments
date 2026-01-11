@@ -85,6 +85,7 @@ fun main() {
     val prometheusMeterRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val dependencies = Dependencies(
         port = environment.port,
+        healthzPort = environment.healthzPort,
         metricsPort = environment.metricsPort,
         passwordManager = passwordManager,
         timeProvider = timeProvider,
@@ -100,6 +101,7 @@ fun main() {
             secureRandomProvider = secureRandomProvider,
         ),
         registrableUsersRepository = repositories.registrableUsersRepository,
+        disableRateLimit = environment.disableRateLimit,
         disableSecureCookie = environment.disableSecureCookie,
         disableHsts = environment.disableHsts,
         disableHttpsRedirect = environment.disableHttpsRedirect,
@@ -223,6 +225,7 @@ private fun databaseRepositories(
 
 private class Environment(
     val port: Int = System.getenv("IMAGE_PORT").toInt(),
+    val healthzPort: Int = System.getenv("HEALTHZ_PORT").toInt(),
     val metricsPort: Int = System.getenv("METRICS_PORT").toInt(),
 
     // Security
@@ -252,6 +255,7 @@ private class Environment(
     val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
     val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
     val disableHttpsRedirect: Boolean = System.getenv("DISABLE_HTTPS_REDIRECT") == "true",
+    val disableRateLimit: Boolean = System.getenv("DISABLE_RATE_LIMIT") == "true",
     val allowLocalOrigins: Boolean = System.getenv("ALLOW_LOCAL_ORIGINS") == "true",
     val createDatabaseTables: Boolean = System.getenv("CREATE_DATABASE_TABLES") == "true",
 ) {

@@ -164,6 +164,7 @@ class JvmServerPlugin : Plugin<Project> {
                 val imageName = jvmServerExtension.dockerConfiguration.name.get()
                 val imageTag = jvmServerExtension.dockerConfiguration.tag.get()
                 val port = jvmServerExtension.dockerConfiguration.port.get()
+                jvmServerExtension.dockerConfiguration.healthzPort.get()
                 val metricsPort = jvmServerExtension.dockerConfiguration.metricsPort.get()
                 val services =
                     jvmServerExtension.dockerComposeConfiguration.services.get()

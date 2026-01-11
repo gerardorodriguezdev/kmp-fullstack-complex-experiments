@@ -16,6 +16,7 @@ import theoneclick.server.shared.email.base.EmailService
 
 internal class Dependencies(
     val port: Int,
+    val healthzPort: Int,
     val metricsPort: Int,
     val passwordManager: PasswordManager,
     val timeProvider: TimeProvider,
@@ -32,6 +33,7 @@ internal class Dependencies(
     val prometheusMeterRegistry: PrometheusMeterRegistry,
 
     // Debug
+    val disableRateLimit: Boolean,
     val disableSecureCookie: Boolean,
     val disableHsts: Boolean,
     val disableHttpsRedirect: Boolean,

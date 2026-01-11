@@ -11,6 +11,7 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
         factory = Netty,
         configure = {
             connector { port = dependencies.port }
+            connector { port = dependencies.healthzPort }
             connector { port = dependencies.metricsPort }
         },
         module = {
@@ -25,10 +26,15 @@ internal fun server(dependencies: Dependencies): EmbeddedServer<NettyApplication
             configureStatusPages()
             configureRequestValidation()
             configureRequestBodyLimit()
+            configureRateLimit(
+                disableRateLimit = dependencies.disableRateLimit,
+                timeProvider = dependencies.timeProvider
+            )
             configureCallId(uuidProvider = dependencies.uuidProvider)
             configureCompression()
             configureShutdown(onShutdown = dependencies.onShutdown)
             configureRouting(
+                healthzPort = dependencies.healthzPort,
                 metricsPort = dependencies.metricsPort,
                 usersRepository = dependencies.usersRepository,
                 passwordManager = dependencies.passwordManager,

@@ -11,6 +11,7 @@ jvmServer {
         executablePath = "/usr/local/bin/docker"
         name = "mock"
         port = intProvider("IMAGE_PORT")
+        healthzPort = intProvider("HEALTHZ_PORT")
         metricsPort = intProvider("METRICS_PORT")
         tag = stringProvider("IMAGE_TAG")
         registryUrl = stringProvider("REGISTRY_LOCATION")

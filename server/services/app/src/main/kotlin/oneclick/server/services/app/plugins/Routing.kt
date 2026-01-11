@@ -16,6 +16,7 @@ import oneclick.server.shared.authentication.security.UuidProvider
 import theoneclick.server.shared.email.base.EmailService
 
 internal fun Application.configureRouting(
+    healthzPort: Int,
     metricsPort: Int,
     usersRepository: UsersRepository,
     passwordManager: PasswordManager,
@@ -30,7 +31,7 @@ internal fun Application.configureRouting(
     prometheusMeterRegistry: PrometheusMeterRegistry,
 ) {
     routing {
-        healthzEndpoint()
+        healthzEndpoint(healthzPort = healthzPort)
         isLoggedEndpoint()
         logoutEndpoint(invalidJwtDataSource = invalidJwtDataSource)
         userRequestLoginEndpoint(

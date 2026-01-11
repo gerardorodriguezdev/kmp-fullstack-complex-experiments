@@ -42,6 +42,11 @@
       "nullable": true
     },
     {
+      "name": "DISABLE_RATE_LIMIT",
+      "propertyType": "Boolean",
+      "nullable": true
+    },
+    {
       "name": "DISABLE_SECURE_COOKIE",
       "propertyType": "Boolean",
       "nullable": true
@@ -133,7 +138,13 @@
     },
     {
       "name": "METRICS_PORT",
-      "propertyType": "String"
+      "propertyType": "String",
+      "nullable": true
+    },
+    {
+      "name": "HEALTHZ_PORT",
+      "propertyType": "String",
+      "nullable": true
     }
   ]
 }

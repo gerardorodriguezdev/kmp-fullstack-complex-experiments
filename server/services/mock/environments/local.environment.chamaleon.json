@@ -11,6 +11,10 @@
         "value": "9091"
       },
       {
+        "name": "HEALTHZ_PORT",
+        "value": "8081"
+      },
+      {
         "name": "IMAGE_TAG",
         "value": "latest"
       },

@@ -35,6 +35,10 @@
         "value": "http://localhost:8080"
       },
       {
+        "name": "DISABLE_RATE_LIMIT",
+        "value": false
+      },
+      {
         "name": "DISABLE_SECURE_COOKIE",
         "value": false
       },
@@ -109,6 +113,10 @@
       {
         "name": "METRICS_PORT",
         "value": "9091"
+      },
+      {
+        "name": "HEALTHZ_PORT",
+        "value": "8081"
       }
     ]
   }
