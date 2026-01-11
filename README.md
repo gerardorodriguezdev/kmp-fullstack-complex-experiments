@@ -1,6 +1,6 @@
-# Home automation project
+Experimental home automation project to try tools, libraries, patterns and architectures
 
-Production ready home automation project that handles the following:
+## Basic functionality
 
 1) Arduino device sends BLE event to a Raspberry Pi
 2) Client Jvm app running in the Raspberry Pi receives the event and sends it to the server
@@ -121,11 +121,11 @@ Home Client
 
 ### Deployment considerations
 
-Your hosting service should handle:
+Your reverse proxy should:
 
-- Rate limiting
-- SSL certificates
-- Load balancing
-- Https redirect
-- Postgres security, backups and updates
-- Redis security and updates
+- Apply rate limiting through all your server instances
+- Handle SSL certificates
+
+Databases:
+
+- It is considered that postgres and redis are already set up and running
