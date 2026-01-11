@@ -102,6 +102,7 @@ fun main() {
         registrableUsersRepository = repositories.registrableUsersRepository,
         disableSecureCookie = environment.disableSecureCookie,
         disableHsts = environment.disableHsts,
+        disableHttpsRedirect = environment.disableHttpsRedirect,
         allowLocalOrigins = environment.allowLocalOrigins,
         prometheusMeterRegistry = prometheusMeterRegistry,
     )
@@ -250,6 +251,7 @@ private class Environment(
     val useLogEmailService: Boolean = System.getenv("USE_DEBUG_EMAIL_SERVICE") == "true",
     val disableSecureCookie: Boolean = System.getenv("DISABLE_SECURE_COOKIE") == "true",
     val disableHsts: Boolean = System.getenv("DISABLE_HSTS") == "true",
+    val disableHttpsRedirect: Boolean = System.getenv("DISABLE_HTTPS_REDIRECT") == "true",
     val allowLocalOrigins: Boolean = System.getenv("ALLOW_LOCAL_ORIGINS") == "true",
     val createDatabaseTables: Boolean = System.getenv("CREATE_DATABASE_TABLES") == "true",
 ) {
