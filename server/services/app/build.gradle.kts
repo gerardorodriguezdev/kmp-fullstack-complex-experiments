@@ -64,6 +64,8 @@ dependencies {
     implementation(ktorLibs.server.sessions)
     implementation(ktorLibs.server.csrf)
     implementation(ktorLibs.server.hsts)
+    implementation(ktorLibs.server.httpRedirect)
+    implementation(ktorLibs.server.rateLimit)
     implementation(ktorLibs.server.metrics.micrometer)
     implementation(libs.kmp.sqldelight)
     implementation(libs.jvm.logback.classic)
