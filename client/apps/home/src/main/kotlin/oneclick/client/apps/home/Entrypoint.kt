@@ -57,15 +57,14 @@ internal class Entrypoint(
         print("> ")
         val commandString = readlnOrNull()?.trim()
         if (!commandString.isNullOrEmpty()) {
-            val commandResult = CommandsParser.parse(commandString)
-            when (commandResult) {
+            when (val commandResult = CommandsParser.parse(commandString)) {
                 is CommandParserResult.Success -> commandsHandler.execute(commandResult.command)
                 is CommandParserResult.Error -> appLogger.e(commandResult.message)
             }
         }
     }
 
-    suspend fun sync() {
+    private suspend fun sync() {
         val isUserLogged = authenticationDataSource.isUserLogged() == UserLoggedResult.Logged
         if (isUserLogged) {
             val devices = devicesStore.getDevices()
