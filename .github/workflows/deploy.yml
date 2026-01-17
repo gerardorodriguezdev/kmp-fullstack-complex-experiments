@@ -2,8 +2,8 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - production
+    tags:
+      - 'v*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
@@ -64,6 +64,12 @@ jobs:
         run: |
           ./gradlew :client:apps:user:core:selectEnvironment -PnewSelectedEnvironment=production
 
-      - name: Build client user image
+      - name: Build client user android apk
         run: |
           ./gradlew :client:apps:user:core:assembleRelease
+
+      - name: Upload client user android apk
+        uses: actions/upload-artifact@v6
+        with:
+          name: client-user-android-${{ env.BRANCH_NAME }}
+          path: ./client/apps/user/core/build/outputs/apk/release/core-release.apk
